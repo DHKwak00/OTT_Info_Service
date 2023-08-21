@@ -18,6 +18,8 @@ public class LoginFrame extends JFrame{
 
 	
 	public LoginFrame() {
+		dao = MemberDAOImple.getInstance();
+
 		setBounds(100, 100, 300, 200);
 		getContentPane().setLayout(null);
 		
@@ -56,7 +58,7 @@ public class LoginFrame extends JFrame{
 		String id = txtId.getText();
 		String pw = txtPw.getText();
 		
-		int result = dao.login(id, pw);//
+		int result = dao.login(id, pw);
 		if(result == 1) {
 			System.out.println("result = " + result + "로그인 완료");
 		}
