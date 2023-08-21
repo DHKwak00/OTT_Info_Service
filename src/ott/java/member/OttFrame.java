@@ -1,108 +1,109 @@
 package ott.java.member;
 
-import java.awt.EventQueue;
-import java.awt.Font;
-
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JButton;
+import java.awt.Font;
 import java.awt.Insets;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class OttFrame {
+public class OttFrame extends JFrame {
 
 	private JFrame frame;
-	private JTextField textField;
+	private JTextField txtSearch;
 	private JTable table;
+	private MemberDAO dao;
+	private MemberDTO dto;
 	
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			
-			public void run() {
-				try {
-					
-					OttFrame window = new OttFrame();
-					window.frame.setVisible(false);
-					
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the application.
-	 */
 	public OttFrame() {
 		
-		initialize();
-	}
-
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void initialize() {
-		frame = new JFrame();
-		frame.setBounds(100, 100, 720, 480);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
+		dao = MemberDAOImple.getInstance();
+		setTitle("OTT 정보 프로그램");
+		setBounds(100, 100, 720, 480);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		getContentPane().setLayout(null);
 		
-		textField = new JTextField();
-		textField.setBounds(12, 115, 350, 35);
-		frame.getContentPane().add(textField);
-		textField.setColumns(10);
+		LoginFrame loginFrame = new LoginFrame();
+//		dto = dao.getInfo(getName()); // LoginFrame에서 입력값이 넘어와야함.
+//		System.out.println(dto);
 		
-		JButton btnLogout = new JButton("로그 아웃");
-		btnLogout.addActionListener(new ActionListener() {
+		JLabel lblNewLabel = new JLabel(dto + " 님 환영합니다.");
+		lblNewLabel.setFont(new Font("Gulim", Font.PLAIN, 12));
+		lblNewLabel.setBounds(475, 10, 120, 23);
+		getContentPane().add(lblNewLabel);
+		
+		JButton btnLogOut = new JButton("로그 아웃");
+		btnLogOut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				JOptionPane.showMessageDialog(btnLogOut, "로그아웃 되었습니다.", "알림", JOptionPane.INFORMATION_MESSAGE);
+				dispose();
+				FrontMain frontMain = new FrontMain();
+				frontMain.mframe.setVisible(true);
 			}
 		});
-		btnLogout.setFont(new Font("Gulim", Font.PLAIN, 12));
-		btnLogout.setBounds(607, 10, 85, 23);
-		frame.getContentPane().add(btnLogout);
+		btnLogOut.setFont(new Font("Gulim", Font.PLAIN, 12));
+		btnLogOut.setBounds(607, 10, 85, 23);
+		getContentPane().add(btnLogOut);
 		
-		JLabel lblNewLabel = new JLabel("@@@님 환영합니다!");
-		lblNewLabel.setFont(new Font("Gulim", Font.PLAIN, 12));
-		lblNewLabel.setBounds(481, 10, 120, 23);
-		frame.getContentPane().add(lblNewLabel);
+		txtSearch = new JTextField();
+		txtSearch.setFont(new Font("Gulim", Font.PLAIN, 12));
+		txtSearch.setBounds(12, 115, 350, 35);
+		getContentPane().add(txtSearch);
+		txtSearch.setColumns(10);
+		
+		JButton btnSearch = new JButton("검 색");
+		btnSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnSearch.setFont(new Font("Gulim", Font.PLAIN, 12));
+		btnSearch.setBounds(375, 115, 85, 35);
+		getContentPane().add(btnSearch);
+		
+		JButton btnSearchAll = new JButton("전체 검색");
+		btnSearchAll.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnSearchAll.setMargin(new Insets(2, 7, 2, 7));
+		btnSearchAll.setFont(new Font("굴림", Font.PLAIN, 12));
+		btnSearchAll.setBounds(475, 115, 85, 35);
+		getContentPane().add(btnSearchAll);
+		
+		JRadioButton rdbtnName = new JRadioButton("제목순");
+		rdbtnName.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		rdbtnName.setFont(new Font("굴림", Font.PLAIN, 12));
+		rdbtnName.setBounds(560, 120, 62, 23);
+		getContentPane().add(rdbtnName);
+		
+		JRadioButton rdbtnLike = new JRadioButton("좋아요순");
+		rdbtnLike.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		rdbtnLike.setFont(new Font("굴림", Font.PLAIN, 12));
+		rdbtnLike.setBounds(620, 120, 73, 23);
+		getContentPane().add(rdbtnLike);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(12, 160, 680, 270);
-		frame.getContentPane().add(scrollPane);
+		getContentPane().add(scrollPane);
 		
 		table = new JTable();
+		table.setFont(new Font("Gulim", Font.PLAIN, 12));
 		scrollPane.setViewportView(table);
-		
-		JButton btnSearch = new JButton("검 색");
-		btnSearch.setFont(new Font("Gulim", Font.PLAIN, 12));
-		btnSearch.setBounds(375, 115, 85, 35);
-		frame.getContentPane().add(btnSearch);
-		
-		JButton btnSearchAll = new JButton("전체 검색");
-		btnSearchAll.setMargin(new Insets(2, 7, 2, 7));
-		btnSearchAll.setFont(new Font("Gulim", Font.PLAIN, 12));
-		btnSearchAll.setBounds(470, 115, 85, 35);
-		frame.getContentPane().add(btnSearchAll);
-		
-		JRadioButton rdbtnName = new JRadioButton("제목순");
-		rdbtnName.setFont(new Font("Gulim", Font.PLAIN, 12));
-		rdbtnName.setBounds(560, 120, 62, 23);
-		frame.getContentPane().add(rdbtnName);
-		
-		JRadioButton rdbtnLike = new JRadioButton("좋아요순");
-		rdbtnLike.setFont(new Font("Gulim", Font.PLAIN, 12));
-		rdbtnLike.setBounds(620, 120, 73, 23);
-		frame.getContentPane().add(rdbtnLike);
 	}
-}
+//	public void setDto(MemberDTO dto) {
+//		this.dto = dto;
+//	}
+} // end OttFrame

@@ -113,6 +113,7 @@ public class TitleDAOImple implements TitleDAO, OracleQuery {
 			e.printStackTrace();
 		} finally {
 			try {
+				rs.close();
 				pstmt.close();
 				conn.close();
 			} catch (SQLException e) {
@@ -207,6 +208,7 @@ public class TitleDAOImple implements TitleDAO, OracleQuery {
 			e.printStackTrace();
 		}finally {
 			try {
+				rs.close();
 				pstmt.close();
 				conn.close();
 			} catch (SQLException e) {
@@ -259,6 +261,7 @@ public class TitleDAOImple implements TitleDAO, OracleQuery {
 			e.printStackTrace();
 		}finally {
 			try {
+				rs.close();
 				pstmt.close();
 				conn.close();
 			} catch (SQLException e) {

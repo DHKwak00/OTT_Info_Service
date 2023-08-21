@@ -23,8 +23,8 @@ public class InsertFrame extends JFrame{
 
 	
 	public InsertFrame() {
-		frame = this;
 		dao = MemberDAOImple.getInstance();
+		frame = this;
 		frame.setTitle("회원가입");
 		frame.setBounds(100, 100, 275, 250);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -75,8 +75,6 @@ public class InsertFrame extends JFrame{
 		btnInsert.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				insertMember();
-				JOptionPane.showMessageDialog(frame, "가입 성공", "알림", JOptionPane.INFORMATION_MESSAGE);
-				dispose();
 			}
 		});
 		btnInsert.setFont(new Font("굴림", Font.PLAIN, 14));
@@ -95,6 +93,11 @@ public class InsertFrame extends JFrame{
 		int result = dao.insert(dto);
 		if(result == 1) {
 			System.out.println("insertMember() : " + result);
+			JOptionPane.showMessageDialog(frame, "가입 성공", "알림", JOptionPane.INFORMATION_MESSAGE);
+			dispose();
+		}else {
+			System.out.println("가입 정보 부족");
+			JOptionPane.showMessageDialog(frame, "가입 정보를 정확히 입력해 주세요.", "알림", JOptionPane.ERROR_MESSAGE);
 		}
 		
 	}

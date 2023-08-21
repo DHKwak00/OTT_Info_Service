@@ -13,7 +13,7 @@ import javax.swing.SwingConstants;
 
 public class FrontMain {
 
-	private JFrame frame;
+	public JFrame mframe;
 
 	/**
 	 * Launch the application.
@@ -23,7 +23,7 @@ public class FrontMain {
 			public void run() {
 				try {
 					FrontMain window = new FrontMain();
-					window.frame.setVisible(true);
+					window.mframe.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -42,16 +42,18 @@ public class FrontMain {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
+		mframe = new JFrame();
+		mframe.setTitle("OTT 정보 공유 서비스");
+		mframe.setBounds(100, 100, 450, 300);
+		mframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		mframe.getContentPane().setLayout(null);
+		
 		
 		JLabel lblNewLabel = new JLabel("OTT 정보 공유 서비스");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setBounds(0, 0, 434, 50);
 		lblNewLabel.setFont(new Font("맑은 고딕", Font.BOLD, 42));
-		frame.getContentPane().add(lblNewLabel);
+		mframe.getContentPane().add(lblNewLabel);
 		
 		JButton btnLogin = new JButton("로 그 인");
 		btnLogin.setFont(new Font("Gulim", Font.PLAIN, 12));
@@ -59,11 +61,12 @@ public class FrontMain {
 			public void actionPerformed(ActionEvent e) {
 				LoginFrame loginFrame = new LoginFrame();
 				loginFrame.setVisible(true);
-
+				mframe.setVisible(false);
+				
 			}
 		});
 		btnLogin.setBounds(155, 82, 120, 50);
-		frame.getContentPane().add(btnLogin);
+		mframe.getContentPane().add(btnLogin);
 
 		JButton btnSignUp = new JButton("회원 가입");
 		btnSignUp.setFont(new Font("Gulim", Font.PLAIN, 12));
@@ -74,7 +77,7 @@ public class FrontMain {
 			}
 		});
 		btnSignUp.setBounds(155, 142, 120, 50);
-		frame.getContentPane().add(btnSignUp);
+		mframe.getContentPane().add(btnSignUp);
 
 		JButton btnAdmin = new JButton("관리자 로그인");
 		btnAdmin.addActionListener(new ActionListener() {
@@ -86,7 +89,7 @@ public class FrontMain {
 		btnAdmin.setMargin(new Insets(2, 5, 2, 5));
 		btnAdmin.setFont(new Font("굴림", Font.PLAIN, 11));
 		btnAdmin.setBounds(330, 228, 92, 23);
-		frame.getContentPane().add(btnAdmin);
+		mframe.getContentPane().add(btnAdmin);
 		
 	} // end initialize()
 

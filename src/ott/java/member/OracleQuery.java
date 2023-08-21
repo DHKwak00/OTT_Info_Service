@@ -35,6 +35,12 @@ public interface OracleQuery {
 			"SELECT * FROM " + TABLE_MEMBER + 
 			" ORDER BY " + COL_MEMBER_NO;
 	
+	// 회원 ID 조회
+	public static final String MEMBER_SELECT_ID =
+			"SELECT * FROM " + TABLE_MEMBER +
+			" WHERE " + COL_MEMBER_ID + " = ?";
+	
+	
 	// 회원 정보 수정
 	public static final String MEMBER_UPDATE = 
 			"UPDATE " + TABLE_MEMBER + " SET " +
