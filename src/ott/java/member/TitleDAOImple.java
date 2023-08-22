@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -41,14 +42,14 @@ public class TitleDAOImple implements TitleDAO, OracleQuery {
 
 			pstmt = conn.prepareStatement(TITLE_INSERT);
 
-			pstmt.setString(1, COL_TITLE_NAME);
-			pstmt.setString(2, COL_TITLE_RATING);
-			pstmt.setString(3, COL_TITLE_GENRE);
-			pstmt.setString(4, COL_TITLE_INFO);
-			pstmt.setString(5, COL_TITLE_LIKE);
-			pstmt.setString(6, COL_TITLE_STAR);
-			pstmt.setString(7, COL_TITLE_RELEASE);
-			pstmt.setString(8, COL_TITLE_OTT);
+			pstmt.setString(1, dto.getTitleName());
+			pstmt.setString(2, dto.getTitleRating());
+			pstmt.setString(3, dto.getTitleGenre());
+			pstmt.setString(4, dto.getTitleInfo());
+			pstmt.setInt(5, dto.getTitleLike());
+			pstmt.setString(6, dto.getTitleStar());
+			pstmt.setDate(7, (java.sql.Date) dto.getTitleRel());
+			pstmt.setString(8, dto.getTitleott());
 
 			result = pstmt.executeUpdate();
 			System.out.println("값 : " + result + " 행 삽입 완료");
@@ -70,41 +71,50 @@ public class TitleDAOImple implements TitleDAO, OracleQuery {
 	// 작품 전체 검색
 	@Override
 	public ArrayList<TitleDTO> select() {
-		ArrayList<TitleDTO> list = new ArrayList<>();
+		ArrayList<TitleDTO> list = null;
 		
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		
 		try {
-			// 2. Oracle JDBC 드라이버를 메모리에 로드
+			// JDBC 드라이버를 메모리에 로드
 			DriverManager.registerDriver(new OracleDriver());
 			System.out.println("드라이버 로드 성공");
 			
-			// 3. DB와 Connection(연결)을 맺음
+			// DB와 연결
 			conn = DriverManager.getConnection(URL, USER, PASSWORD);
 			System.out.println("DB 연결 성공");
 
 			// Connection 객체를 사용하여 Statement 객체를 생성
 			pstmt = conn.prepareStatement(TITLE_SELECT);
-					
+			System.out.println(TITLE_SELECT);
+			
 			// SQL 문장 실행(DB 서버로 SQL 전송)
 			rs = pstmt.executeQuery();
-	
+
+			
+			list = new ArrayList<>();
 			while(rs.next()) { // 레코드가 존재할 때까지
-				int titleNo = rs.getInt(COL_TITLE_NO);
-				String titleName = rs.getString(COL_TITLE_NAME);
-				String titleRating = rs.getString(COL_TITLE_RATING);
-				String titleGenre = rs.getString(COL_TITLE_GENRE);
-				String titleInfo = rs.getString(COL_TITLE_INFO);
-				int titleLike = rs.getInt(COL_TITLE_LIKE);
-				String titleStar = rs.getString(COL_TITLE_STAR);
-				Date titleRel = rs.getDate(COL_TITLE_RELEASE);
-				String titleott = rs.getString(COL_TITLE_OTT);
+				int titleNo = rs.getInt(1);
+				String titleName = rs.getString(2);
+				String titleRating = rs.getString(3);
+				String titleGenre = rs.getString(4);
+				String titleInfo = rs.getString(5);
+				int titleLike = rs.getInt(6);
+				String titleStar = rs.getString(7);
+				Date titleRel = rs.getDate(8);
+				String titleott = rs.getString(9);
 				
-				TitleDTO dto = new TitleDTO(titleNo, titleName, titleRating, titleGenre, titleInfo, 
-						titleLike, titleStar, titleRel, titleott);
+				TitleDTO dto = new TitleDTO(titleNo, titleName, 
+											titleRating, titleGenre, 
+											titleInfo, titleLike, 
+											titleStar, titleRel, 
+											titleott);
 				list.add(dto);
+			}
+			for(TitleDTO dto:list) {
+				System.out.println(dto);
 			}
 
 
@@ -310,6 +320,7 @@ public class TitleDAOImple implements TitleDAO, OracleQuery {
 			
 		}
 		return result;
-	}
-
-}
+		
+	} // end delete()
+	
+} // end TitleDAOImple

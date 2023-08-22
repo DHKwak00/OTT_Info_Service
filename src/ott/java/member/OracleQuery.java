@@ -60,6 +60,11 @@ public interface OracleQuery {
 			"SELECT MEMBER_PASSWORD FROM " + TABLE_MEMBER +
 			" WHERE " + COL_MEMBER_ID + " = ?";
 	
+	// 관리자 로그인
+		public static final String ADMIN_LOGIN = 
+				"SELECT MEMBER_PASSWORD FROM " + TABLE_MEMBER +
+				" WHERE " + COL_MEMBER_ID + " = 'admin'";
+	
 			
 			
 	// 작품 등록

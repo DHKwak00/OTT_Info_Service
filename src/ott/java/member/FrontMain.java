@@ -49,6 +49,8 @@ public class FrontMain {
 		mframe.getContentPane().setLayout(null);
 		
 		
+		
+		
 		JLabel lblNewLabel = new JLabel("OTT 정보 공유 서비스");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setBounds(0, 0, 434, 50);
@@ -84,6 +86,7 @@ public class FrontMain {
 			public void actionPerformed(ActionEvent e) {
 				LoginFrame loginFrame = new LoginFrame();
 				loginFrame.setVisible(true);
+				mframe.setVisible(false);
 			}
 		});
 		btnAdmin.setMargin(new Insets(2, 5, 2, 5));

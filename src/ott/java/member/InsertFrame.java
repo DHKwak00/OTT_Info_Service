@@ -19,7 +19,7 @@ public class InsertFrame extends JFrame{
 	private JTextField txtPhone;
 	private JTextField txtEmail;
 	
-	private static MemberDAO dao;
+	private MemberDAO dao;
 
 	
 	public InsertFrame() {

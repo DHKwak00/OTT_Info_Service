@@ -175,6 +175,44 @@ public class MemberDAOImple implements MemberDAO, OracleQuery {
 		
 		return result;
 	}
+	
+	// 관리자 로그인
+		@Override
+		public int loginAdm(String id, String pw) {
+			int result = 0;
+			Connection conn = null;
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			try {
+				DriverManager.registerDriver(new OracleDriver());
+				System.out.println("드라이버 로드 성공");
+				conn = DriverManager.getConnection(URL, USER, PASSWORD);
+				System.out.println("DB 로드 성공");
+				pstmt = conn.prepareStatement(ADMIN_LOGIN);
+				
+				pstmt.setString(1, id);
+				rs = pstmt.executeQuery();
+				if(rs.next()) {
+					if(rs.getString(1).equals(pw)) {
+						result = 1; // pw = true
+						System.out.println(result);
+					}else {
+						result = 0; // pw = false
+						System.out.println(result);
+					}
+				}else {
+					result = -1; // id = false
+				}
+				
+				System.out.println(result);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			return result;
+		}
 
 	// 회원 정보 조회
 	@Override
