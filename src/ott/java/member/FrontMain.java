@@ -74,7 +74,7 @@ public class FrontMain {
 		btnSignUp.setFont(new Font("Gulim", Font.PLAIN, 12));
 		btnSignUp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				InsertFrame insertFrame = new InsertFrame();
+				InsertMemberFrame insertFrame = new InsertMemberFrame();
 				insertFrame.setVisible(true);
 			}
 		});

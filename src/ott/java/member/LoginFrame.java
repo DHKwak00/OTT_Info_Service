@@ -7,9 +7,12 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class LoginFrame extends JFrame{
 
@@ -20,6 +23,7 @@ public class LoginFrame extends JFrame{
 	
 	private MemberDAO dao;
 	private MemberDTO dto;
+	
 	
 
 	public LoginFrame() {
@@ -44,7 +48,13 @@ public class LoginFrame extends JFrame{
 		lblNewLabel_1.setBounds(35, 70, 57, 15);
 		getContentPane().add(lblNewLabel_1);
 		
-		txtPw = new JTextField();
+		txtPw = new JPasswordField();
+		txtPw.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String inId = txtId.getText();
+				loginMember(inId);
+			}
+		});
 		txtPw.setColumns(10);
 		txtPw.setBounds(104, 67, 116, 21);
 		getContentPane().add(txtPw);
@@ -54,8 +64,9 @@ public class LoginFrame extends JFrame{
 		btnLogin = new JButton("로그인");
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				loginMember();
-					
+				String inId = txtId.getText();
+				loginMember(inId);
+				
 			}
 		});
 		
@@ -72,7 +83,7 @@ public class LoginFrame extends JFrame{
 		
 	} // end LoginFrame()
 	
-	private int loginMember() {
+	private int loginMember(String inId) {
 		String id = txtId.getText();
 		String pw = txtPw.getText();
 		
@@ -81,7 +92,7 @@ public class LoginFrame extends JFrame{
 				System.out.println("result = " + result + " 로그인 완료");
 				JOptionPane.showMessageDialog(btnLogin, "관리자 계정으로 로그인되었습니다.", "알림", JOptionPane.INFORMATION_MESSAGE);
 				dispose();
-				AdminFrame adminFrame = new AdminFrame();
+				AdminFrame adminFrame = new AdminFrame(inId);
 				adminFrame.setVisible(true);
 				dto = dao.getInfo(id);
 				System.out.println("dto값: " + dto);
@@ -92,7 +103,7 @@ public class LoginFrame extends JFrame{
 				System.out.println("result = " + result + " 로그인 완료");
 				JOptionPane.showMessageDialog(btnLogin, id +" 님 " +"환영합니다!", "알림", JOptionPane.INFORMATION_MESSAGE);
 				dispose();
-				OttFrame ottFrame = new OttFrame();
+				OttFrame ottFrame = new OttFrame(id);
 				ottFrame.setVisible(true);
 				dto = dao.getInfo(id);
 				System.out.println("dto값: " + dto);

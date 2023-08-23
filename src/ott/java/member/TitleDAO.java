@@ -13,7 +13,7 @@ public interface TitleDAO {
 	public abstract int update(int titleNo, TitleDTO dto);
 	
 	// 작품 제목 검색
-	public abstract TitleDTO selectTitle(String titleName);
+	public abstract ArrayList<TitleDTO> selectTitle(String titleName);
 	
 	// 작품 장르별 검색
 	public abstract TitleDTO selectGenre(String titleGenre);

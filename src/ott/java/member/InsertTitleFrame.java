@@ -144,15 +144,16 @@ public class InsertTitleFrame extends JFrame{
 		int like = Integer.parseInt(txtLike.getText());
 		System.out.println(like);
 		String star = txtStar.getText();
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+//		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		String rrel = txtRel.getText();
-		Date rel = null;
-		try {
-			rel = (java.sql.Date) formatter.parse(rrel);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		java.sql.Date rel = java.sql.Date.valueOf(rrel); // * 문자열을 DB에 date로 날려주기
+//		java.util.Date rel = null;
+//		try {
+//			rel = Date.v;
+//		} catch (ParseException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		String ott = txtOtt.getText();
 		
 		TitleDTO dto = new TitleDTO(0, name, rate, genre, info,
@@ -161,7 +162,7 @@ public class InsertTitleFrame extends JFrame{
 		int result = dao.insert(dto);
 		System.out.println(result);
 		if(result == 1) {
-			System.out.println("insertMember() : " + result);
+			System.out.println("insertTitle()값 : " + result);
 			JOptionPane.showMessageDialog(frame, "등록되었습니다.", "알림", JOptionPane.INFORMATION_MESSAGE);
 			dispose();
 		}else {

@@ -27,35 +27,32 @@ public class OttFrame extends JFrame {
 	private JFrame frame;
 	private JTextField txtSearch;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
-	
+
 	private JTable table;
-	private String[] colNames = {"No", "작품명", "등급", "장르", "작품설명",
-								 "좋아요", "평점", "개봉일", "OTT"};
+	private String[] colNames = { "No", "작품명", "등급", "장르", "작품설명", "좋아요", "평점", "개봉일", "OTT" };
 	private Object[] records = new Object[colNames.length];
 	private DefaultTableModel tableModel; // 테이블 모델 변수
-	
-	private TitleDAO dao;
-	
 
-	public OttFrame() {
-		
+	private TitleDAO dao;
+
+
+	public OttFrame(String inId) {
+
 		dao = TitleDAOImple.getInstance();
 		frame = this;
 		frame.setTitle("OTT 정보 프로그램");
 		frame.setBounds(100, 100, 1366, 480);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
-		
-		LoginFrame loginFrame = new LoginFrame();
+
 //		dto = dao.getInfo(getName()); // LoginFrame에서 입력값이 넘어와야함.
 //		System.out.println(dto);
-		
-		JLabel lblNewLabel = new JLabel(/* dto + */ " 님 환영합니다.");
+		JLabel lblNewLabel = new JLabel(inId + " 님 환영합니다.");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.TRAILING);
 		lblNewLabel.setFont(new Font("Gulim", Font.PLAIN, 12));
 		lblNewLabel.setBounds(1105, 10, 130, 23);
 		frame.getContentPane().add(lblNewLabel);
-		
+
 		JButton btnLogOut = new JButton("로그 아웃");
 		btnLogOut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -68,22 +65,23 @@ public class OttFrame extends JFrame {
 		btnLogOut.setFont(new Font("Gulim", Font.PLAIN, 12));
 		btnLogOut.setBounds(1247, 10, 90, 23);
 		frame.getContentPane().add(btnLogOut);
-		
+
 		txtSearch = new JTextField();
-		txtSearch.setFont(new Font("Gulim", Font.PLAIN, 12));
+		txtSearch.setFont(new Font("Gulim", Font.PLAIN, 16));
 		txtSearch.setBounds(12, 115, 350, 35);
 		frame.getContentPane().add(txtSearch);
 		txtSearch.setColumns(10);
-		
+
 		JButton btnSearch = new JButton("검 색");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				selectNameTable();
 			}
 		});
 		btnSearch.setFont(new Font("Gulim", Font.PLAIN, 12));
 		btnSearch.setBounds(375, 115, 85, 35);
 		frame.getContentPane().add(btnSearch);
-		
+
 		JButton btnSearchAll = new JButton("전체 검색");
 		btnSearchAll.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -94,7 +92,7 @@ public class OttFrame extends JFrame {
 		btnSearchAll.setFont(new Font("굴림", Font.PLAIN, 12));
 		btnSearchAll.setBounds(475, 115, 85, 35);
 		frame.getContentPane().add(btnSearchAll);
-		
+
 		JRadioButton rdbtnName = new JRadioButton("제목순");
 		buttonGroup.add(rdbtnName);
 		rdbtnName.addActionListener(new ActionListener() {
@@ -104,7 +102,7 @@ public class OttFrame extends JFrame {
 		rdbtnName.setFont(new Font("굴림", Font.PLAIN, 12));
 		rdbtnName.setBounds(560, 120, 62, 23);
 		frame.getContentPane().add(rdbtnName);
-		
+
 		JRadioButton rdbtnLike = new JRadioButton("좋아요순");
 		buttonGroup.add(rdbtnLike);
 		rdbtnLike.addActionListener(new ActionListener() {
@@ -114,63 +112,64 @@ public class OttFrame extends JFrame {
 		rdbtnLike.setFont(new Font("굴림", Font.PLAIN, 12));
 		rdbtnLike.setBounds(620, 120, 73, 23);
 		frame.getContentPane().add(rdbtnLike);
-		
+
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(12, 160, 1325, 270);
 		frame.getContentPane().add(scrollPane);
-				
-		
+
 		tableModel = new DefaultTableModel(colNames, 0) {
 			@Override
 			public boolean isCellEditable(int row, int culmn) {
 				return false;
 			}// 변경 불가
 		};
-		
+
 		// 컬럼 가운데 정렬
 		DefaultTableCellRenderer celAlignCenter = new DefaultTableCellRenderer();
 		celAlignCenter.setHorizontalAlignment(JLabel.CENTER);
-		
+
 		// 컬럼 우측 정렬
 		DefaultTableCellRenderer celAlignRight = new DefaultTableCellRenderer();
 		celAlignRight.setHorizontalAlignment(JLabel.RIGHT);
-		
-		table = new JTable(tableModel) {
+
+		table = new JTable(tableModel){
 			// 컬럼값 길이 자동 조절
 			@Override
-		       public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
-		           Component component = super.prepareRenderer(renderer, row, column);
-		           int rendererWidth = component.getPreferredSize().width;
-		           TableColumn tableColumn = getColumnModel().getColumn(column);
-		           tableColumn.setPreferredWidth(Math.max(rendererWidth + getIntercellSpacing().width, tableColumn.getPreferredWidth()));
-		           return component;
-		        }
+			public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+				Component component = super.prepareRenderer(renderer, row, column);
+				int rendererWidth = component.getPreferredSize().width;
+				TableColumn tableColumn = getColumnModel().getColumn(column);
+				tableColumn.setPreferredWidth(
+						Math.max(rendererWidth + getIntercellSpacing().width, tableColumn.getPreferredWidth()));
+				return component;
+			}
 		};
-		
+
 		table.setFont(new Font("Gulim", Font.PLAIN, 12));
 		table.getTableHeader().setReorderingAllowed(false);
 		table.getTableHeader().setResizingAllowed(false);
-		table.setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS); // 가로 맞춤
-		table.getColumn("No").setPreferredWidth(25);
+		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); // 가로 맞춤
+		table.getColumn("No").setPreferredWidth(30);
 		table.getColumn("등급").setPreferredWidth(35);
 		table.getColumn("등급").setCellRenderer(celAlignCenter);
-		table.getColumn("좋아요").setPreferredWidth(45);
+		table.getColumn("작품설명").setPreferredWidth(900);
+		table.getColumn("좋아요").setPreferredWidth(45); 
 		table.getColumn("좋아요").setCellRenderer(celAlignCenter);
 		table.getColumn("평점").setPreferredWidth(35);
+		table.getColumn("평점").setCellRenderer(celAlignRight);
 		table.getColumn("개봉일").setPreferredWidth(65);
-		table.getColumn("OTT").setPreferredWidth(60);
-		
-		
+		table.getColumn("OTT").setPreferredWidth(62);
+		table.getColumn("OTT").setCellRenderer(celAlignCenter);
+
 		scrollPane.setViewportView(table);
-		
-		
-	} // end OttFrame()
-	
+
+	}// end OttFrame()
+
 	private void selectAllTable() {
 		ArrayList<TitleDTO> list = dao.select();
-		System.out.println(list.toString());
+//		System.out.println(list.toString());
 		tableModel.setRowCount(0);
-		for(int i =0; i<list.size(); i++) {
+		for (int i = 0; i < list.size(); i++) {
 			records[0] = list.get(i).getTitleNo();
 			records[1] = list.get(i).getTitleName();
 			records[2] = list.get(i).getTitleRating();
@@ -182,7 +181,37 @@ public class OttFrame extends JFrame {
 			records[8] = list.get(i).getTitleott();
 			tableModel.addRow(records);
 		}
-		
+
 	} // end selectAllTable()
-	
-} // end OttFrame
+
+	private void selectNameTable() {
+		// 텍스트필드에 입력값이 검색버튼 -> selectNameTable() 메소드에서
+		// String titleName에 담기고 dao.selectTitle(titleName)로 보내져,
+		// return 값이 dto (TITLE_NAME 컬럼에 titleName의 값)
+		String searchName = ("%" + txtSearch.getText() + "%");
+		searchName = searchName.toLowerCase();
+		ArrayList<TitleDTO> list = dao.selectTitle(searchName);
+//		System.out.println(list.toString());
+		tableModel.setRowCount(0);
+
+		if (txtSearch.getText().equals("")) {
+			JOptionPane.showMessageDialog(null, "검색어를 입력해 주세요.", "알림", JOptionPane.INFORMATION_MESSAGE);
+		} else {
+			for (int i = 0; i < list.size(); i++) {
+				records[0] = list.get(i).getTitleNo();
+				records[1] = list.get(i).getTitleName();
+				records[2] = list.get(i).getTitleRating();
+				records[3] = list.get(i).getTitleGenre();
+				records[4] = list.get(i).getTitleInfo();
+				records[5] = list.get(i).getTitleLike();
+				records[6] = list.get(i).getTitleStar();
+				records[7] = list.get(i).getTitleRel();
+				records[8] = list.get(i).getTitleott();
+				tableModel.addRow(records);
+			}
+		}
+		// titleName이 DB의 TITLE_NAME 컬럼에 있으면 ~
+
+	}// end selectNameTable()
+
+}// end OttFrame

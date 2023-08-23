@@ -1,6 +1,5 @@
 package ott.java.member;
 
-import java.time.LocalDate;
 import java.util.Date;
 
 /*

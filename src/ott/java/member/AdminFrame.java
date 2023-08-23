@@ -9,6 +9,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import java.awt.event.ActionListener;
@@ -26,7 +27,7 @@ public class AdminFrame extends JFrame{
 	
 	private static TitleDAO dao;
 
-	public AdminFrame() {
+	public AdminFrame(String inId) {
 		dao = TitleDAOImple.getInstance();
 		frame = this;
 		frame.setBounds(100, 100, 540, 400);
@@ -34,7 +35,7 @@ public class AdminFrame extends JFrame{
 		frame.getContentPane().setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("관리자 계정 로그인 중입니다.");
-		lblNewLabel.setBounds(262, 14, 160, 15);
+		lblNewLabel.setBounds(262, 14, 170, 15);
 		frame.getContentPane().add(lblNewLabel);
 		
 		JButton btnLogOut = new JButton("로그 아웃");
@@ -73,6 +74,10 @@ public class AdminFrame extends JFrame{
 		scrollPane.setBounds(12, 110, 500, 241);
 		frame.getContentPane().add(scrollPane);
 		
+		// 컬럼 우측 정렬
+				DefaultTableCellRenderer celAlignRight = new DefaultTableCellRenderer();
+				celAlignRight.setHorizontalAlignment(JLabel.RIGHT);
+		
 		tableModel = new DefaultTableModel(colNames, 0);
 		
 		table = new JTable(tableModel);
@@ -84,12 +89,15 @@ public class AdminFrame extends JFrame{
 		table.getColumn("등급").setPreferredWidth(35);
 		table.getColumn("좋아요").setPreferredWidth(45);
 		table.getColumn("평점").setPreferredWidth(35);
+		table.getColumn("평점").setCellRenderer(celAlignRight);
 		table.getColumn("개봉일").setPreferredWidth(65);
 		table.getColumn("OTT").setPreferredWidth(60);
 		scrollPane.setViewportView(table);
 		
 	} // end AdminFrame()
 	
+
+
 	private void selectAllTable() {
 		ArrayList<TitleDTO> list = dao.select();
 		System.out.println(list.toString());
