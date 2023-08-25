@@ -8,6 +8,12 @@ public interface TitleDAO {
 	
 	// 작품 전체 검색
 	public abstract ArrayList<TitleDTO> select();
+
+	// 작품 전체 검색 (제목순)
+	public abstract ArrayList<TitleDTO> selectByName();
+	
+	// 작품 전체 검색 (좋아요순)
+	public abstract ArrayList<TitleDTO> selectByLike();
 	
 	// 작품 정보 수정
 	public abstract int update(int titleNo, TitleDTO dto);
@@ -20,4 +26,5 @@ public interface TitleDAO {
 	
 	// 작품 삭제
 	public abstract int delete(int titleNo);
+
 }

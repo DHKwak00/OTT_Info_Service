@@ -11,20 +11,23 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Date;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
-public class AdminFrame extends JFrame{
+public class AdminFrame extends JFrame {
 
 	private JFrame frame;
 	private JTable table;
-	private String[] colNames = {"No", "작품명", "등급", "장르", "작품설명",
-								 "좋아요", "평점", "개봉일", "OTT"};
+	private String[] colNames = { "No", "작품명", "등급", "장르", "작품설명", "좋아요", "평점", "개봉일", "OTT" };
 	private Object[] records = new Object[colNames.length];
 	private DefaultTableModel tableModel; // 테이블 모델 변수
-	
+
 	private static TitleDAO dao;
 
 	public AdminFrame(String inId) {
@@ -33,11 +36,11 @@ public class AdminFrame extends JFrame{
 		frame.setBounds(100, 100, 540, 400);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
-		
+
 		JLabel lblNewLabel = new JLabel("관리자 계정 로그인 중입니다.");
 		lblNewLabel.setBounds(262, 14, 170, 15);
 		frame.getContentPane().add(lblNewLabel);
-		
+
 		JButton btnLogOut = new JButton("로그 아웃");
 		btnLogOut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -50,17 +53,17 @@ public class AdminFrame extends JFrame{
 		btnLogOut.setMargin(new Insets(2, 5, 2, 5));
 		btnLogOut.setBounds(434, 10, 78, 23);
 		frame.getContentPane().add(btnLogOut);
-		
+
 		JButton btnTitleInsert = new JButton("작품 등록");
 		btnTitleInsert.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				InsertTitleFrame insertTitleFrame = new InsertTitleFrame();
+				TitleInsertFrame insertTitleFrame = new TitleInsertFrame();
 				insertTitleFrame.setVisible(true);
 			}
 		});
 		btnTitleInsert.setBounds(12, 10, 120, 40);
 		frame.getContentPane().add(btnTitleInsert);
-		
+
 		JButton btnSearchAll = new JButton("전체 검색");
 		btnSearchAll.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -69,18 +72,27 @@ public class AdminFrame extends JFrame{
 		});
 		btnSearchAll.setBounds(12, 60, 120, 40);
 		frame.getContentPane().add(btnSearchAll);
-		
+
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(12, 110, 500, 241);
 		frame.getContentPane().add(scrollPane);
-		
+
 		// 컬럼 우측 정렬
-				DefaultTableCellRenderer celAlignRight = new DefaultTableCellRenderer();
-				celAlignRight.setHorizontalAlignment(JLabel.RIGHT);
-		
+		DefaultTableCellRenderer celAlignRight = new DefaultTableCellRenderer();
+		celAlignRight.setHorizontalAlignment(JLabel.RIGHT);
+
 		tableModel = new DefaultTableModel(colNames, 0);
-		
+
 		table = new JTable(tableModel);
+
+		// 테이블 클릭 수정 이벤트
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				titleUpdate();
+			}
+		});
+
 		table.setFont(new Font("Gulim", Font.PLAIN, 12));
 		table.getTableHeader().setReorderingAllowed(false);
 		table.getTableHeader().setResizingAllowed(false);
@@ -93,16 +105,14 @@ public class AdminFrame extends JFrame{
 		table.getColumn("개봉일").setPreferredWidth(65);
 		table.getColumn("OTT").setPreferredWidth(60);
 		scrollPane.setViewportView(table);
-		
-	} // end AdminFrame()
-	
 
+	} // end AdminFrame()
 
 	private void selectAllTable() {
 		ArrayList<TitleDTO> list = dao.select();
-		System.out.println(list.toString());
+//		System.out.println(list.toString());
 		tableModel.setRowCount(0);
-		for(int i =0; i<list.size(); i++) {
+		for (int i = 0; i < list.size(); i++) {
 			records[0] = list.get(i).getTitleNo();
 			records[1] = list.get(i).getTitleName();
 			records[2] = list.get(i).getTitleRating();
@@ -114,13 +124,33 @@ public class AdminFrame extends JFrame{
 			records[8] = list.get(i).getTitleott();
 			tableModel.addRow(records);
 		}
-		
+
 	} // end selectAllTable()
-	
-	private void insertTitle() {
-		// TODO Auto-generated method stub
+
+	private void titleUpdate() {
+		// 선택된 셀의 행 번호
+		int row = table.getSelectedRow();
+
+		// 모델 객체 담기
+		TableModel tableModel = table.getModel();
+
+		// 선택한 셀의 행의 값을 DTO로 포장하기
+		int no = (int) tableModel.getValueAt(row, 0);
+		String name = (String) tableModel.getValueAt(row, 1);
+		String rate = (String) tableModel.getValueAt(row, 2);
+		String genre = (String) tableModel.getValueAt(row, 3);
+		String info = (String) tableModel.getValueAt(row, 4);
+		int like = (int) tableModel.getValueAt(row, 5);
+		String star = (String) tableModel.getValueAt(row, 6);
+		Date rel = (Date) tableModel.getValueAt(row, 7);
+		String ott = (String) tableModel.getValueAt(row, 8);
+
+		TitleDTO dto = new TitleDTO(no, name, rate, genre, info, like, star, rel, ott);
+		System.out.println(dto.getTitleNo());
 		
-	}
-	
+		TitleUpdateFrame updateFrame = new TitleUpdateFrame(dto);
+		updateFrame.setVisible(true);
+
+	}// end titleUpdate()
 
 }

@@ -29,4 +29,42 @@ OTT 정보 서비스
 
 *** 기능 추가 예정 사항 ***
 작품별 한줄평
-즐겨찾기
+내가 '좋아요'한 리스트
+
+3-1. 데이터 구조 - DB 테이블
+테이블 : MEMBER
+컬럼 : 
+MEMBER_NO(NUMBER) : 회원 등록 번호(PK)
+MEMBER_ID(VARCHER2(20)) : 회원 아이디(NOT NULL)
+MEMBER_PASSWORD(VARCHER2(50)) : 회원 비밀번호(NOT NULL)
+MEMBER_PHONE(VARCHER2(20)) : 회원 연락처(NOT NULL)
+MEMBER_EMAIL(VARCHER2(50)) : 회원 이메일(NOT NULL)
+
+
+테이블 : TITLE
+컬럼 : 
+TITLE_NO(NUMBER) : 작품 번호(PK)
+TITLE_NAME(VARCHER2(50)) : 작품 이름
+TITLE_RATING(VARCHER2(20) : 작품 시청등급
+TITLE_GENRE(VARCHER2(20) : 작품 장르 (범죄 밀리터리 판타지 코미디 애니메이션 로맨스 미스터리 공포 액션 종류 : 9)
+TITLE_INFO(VARCHER2(100)) : 작품 정보
+TITLE_LIKE(NUMBER) : 좋아요
+TITLE_STAR(VARCHER2(20)) : 작품 평점
+TITLE_RELEASE(VARCHER2(20)) : 작품 개봉일
+TITLE_OTT(VARCHER2(20)) : 시청 가능한 OTT (넷플릭스, 왓챠, 디즈니)
+
+
+테이블 : LIKE
+컬럼 :
+LIKE_NO(NUMBER) : 인덱스 번호 (PK)
+MEMBER_ID(VARCHER2(20)) : 좋아요한 id (FK - MEMBER_ID)
+TITLE_NAME(VARCHER2(50)) : 좋아요한 작품 (FK - TITLE_NAME)
+
+
+
+
+3-2. 데이터 구조 - DTO
+ ㄱ. MemberDTO
+ ㄴ. TitleDTO
+ ㄷ. LikeDTO
+

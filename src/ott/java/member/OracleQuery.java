@@ -77,10 +77,20 @@ public interface OracleQuery {
 			"SELECT * FROM " + TABLE_TITLE + 
 			" ORDER BY " + COL_TITLE_NO;
 	
+	// 작품 전체 검색 (제목순)
+	public static final String TITLE_SELECT_NAME = 
+			"SELECT * FROM " + TABLE_TITLE + 
+			" ORDER BY " + COL_TITLE_NAME;
+	
+	// 작품 전체 검색 (좋아요순)
+		public static final String TITLE_SELECT_LIKE = 
+				"SELECT * FROM " + TABLE_TITLE + 
+				" ORDER BY " + COL_TITLE_LIKE + " DESC";
+	
 	// 작품 제목 검색
 	public static final String TITLE_SELECT_BY_NAME = 
 			"SELECT * FROM " + TABLE_TITLE +
-			" WHERE " + " (lower(" + COL_TITLE_NAME + ")) " + " LIKE " + "?";
+			" WHERE " + "lower(" + COL_TITLE_NAME + ")" + " LIKE " + "?";
 	
 	// 작품 장르 검색
 	// 범죄 밀리터리 판타지 코미디 애니메이션 멜로/로맨스 미스터리 공포(호러) 액션
@@ -97,7 +107,7 @@ public interface OracleQuery {
 					COL_TITLE_INFO + " = ?, " +
 					COL_TITLE_LIKE + " = ?, " +
 					COL_TITLE_STAR + " = ?, " +
-					COL_TITLE_RELEASE + " = ? " +
+					COL_TITLE_RELEASE + " = ?, " +
 					COL_TITLE_OTT + " = ? " +
 					" WHERE " + COL_TITLE_NO + " = ?";
 	

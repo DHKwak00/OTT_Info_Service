@@ -12,7 +12,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Insets;
 
-public class InsertMemberFrame extends JFrame{
+public class MemberInsertFrame extends JFrame{
 
 	private JFrame frame;
 	private JTextField txtId;
@@ -24,7 +24,7 @@ public class InsertMemberFrame extends JFrame{
 	private MemberDTO dto;
 
 	
-	public InsertMemberFrame() {
+	public MemberInsertFrame() {
 		dao = MemberDAOImple.getInstance();
 		frame = this;
 		frame.setTitle("회원가입");

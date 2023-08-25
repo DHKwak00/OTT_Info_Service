@@ -3,39 +3,37 @@ package ott.java.member;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 
-public class TitleInsertFrame extends JFrame{
+public class TitleUpdateFrame extends JFrame{
 	
 	private JFrame frame;
 	
 	private JTextField txtName;
 	private JTextField txtRating;
 	private JTextField txtGenre;
-	private JTextField txtInfo;
+	private JTextArea txtInfo;
 	private JTextField txtLike;
 	private JTextField txtStar;
 	private JTextField txtRel;
 	private JTextField txtOtt;
 	
 	private TitleDAO dao;
+	private int no;
 	
-	public TitleInsertFrame() {
+	
+	public TitleUpdateFrame(TitleDTO dto) {
 		dao = TitleDAOImple.getInstance();
 		frame = this;
-		frame.setTitle("작품 등록");
+		frame.setTitle("작품 수정");
 		frame.setBounds(100, 100, 275, 515);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		getContentPane().setFont(new Font("Gulim", Font.PLAIN, 12));
@@ -85,13 +83,15 @@ public class TitleInsertFrame extends JFrame{
 		txtName = new JTextField();
 		txtName.setFont(new Font("Gulim", Font.PLAIN, 12));
 		txtName.setBounds(114, 15, 116, 21);
-		getContentPane().add(txtName);
 		txtName.setColumns(10);
+		txtName.setText(dto.getTitleName());
+		getContentPane().add(txtName);
 		
 		txtRating = new JTextField();
 		txtRating.setFont(new Font("Gulim", Font.PLAIN, 12));
-		txtRating.setColumns(10);
 		txtRating.setBounds(114, 55, 116, 21);
+		txtRating.setColumns(10);
+		txtRating.setText(dto.getTitleRating());
 		getContentPane().add(txtRating);
 		
 		JScrollPane scrollPane = new JScrollPane();
@@ -99,55 +99,66 @@ public class TitleInsertFrame extends JFrame{
 		scrollPane.setBounds(114, 130, 116, 145);
 		getContentPane().add(scrollPane);
 		
-		JTextArea txtInfo = new JTextArea();
+		txtInfo = new JTextArea();
 		txtInfo.setLineWrap(true);
-		scrollPane.setViewportView(txtInfo);
 		txtInfo.setFont(new Font("굴림", Font.PLAIN, 12));
 		txtInfo.setColumns(10);
+		scrollPane.setViewportView(txtInfo);
+		txtInfo.setText(dto.getTitleInfo());
 		
 		txtGenre = new JTextField();
 		txtGenre.setFont(new Font("Gulim", Font.PLAIN, 12));
-		txtGenre.setColumns(10);
 		txtGenre.setBounds(114, 95, 116, 21);
+		txtGenre.setColumns(10);
+		txtGenre.setText(dto.getTitleGenre());
 		getContentPane().add(txtGenre);
 		
 		txtLike = new JTextField();
+		txtLike.setEditable(false);
 		txtLike.setFont(new Font("Gulim", Font.PLAIN, 12));
 		txtLike.setColumns(10);
 		txtLike.setBounds(114, 290, 116, 21);
+		txtLike.setText(String.valueOf(dto.getTitleLike()));
 		getContentPane().add(txtLike);
 		
 		txtStar = new JTextField();
 		txtStar.setFont(new Font("Gulim", Font.PLAIN, 12));
 		txtStar.setColumns(10);
 		txtStar.setBounds(114, 330, 116, 21);
+		txtStar.setText(dto.getTitleStar());
 		getContentPane().add(txtStar);
 		
 		txtRel = new JTextField();
 		txtRel.setFont(new Font("Gulim", Font.PLAIN, 12));
 		txtRel.setColumns(10);
 		txtRel.setBounds(114, 370, 116, 21);
+		txtRel.setText(String.valueOf(dto.getTitleRel()));
 		getContentPane().add(txtRel);
 		
 		txtOtt = new JTextField();
 		txtOtt.setFont(new Font("Gulim", Font.PLAIN, 12));
 		txtOtt.setColumns(10);
 		txtOtt.setBounds(114, 410, 116, 21);
+		txtOtt.setText(dto.getTitleott());
 		getContentPane().add(txtOtt);
 		
-		JButton btnInsert = new JButton("등 록");
+		JButton btnInsert = new JButton("수 정");
 		btnInsert.setFont(new Font("Gulim", Font.PLAIN, 12));
 		btnInsert.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				insertTitle();
+				titleUpdate();
 			}
 		});
 		btnInsert.setBounds(150, 443, 97, 23);
 		getContentPane().add(btnInsert);
 		
+		no = dto.getTitleNo();
 		
-	}
-	private void insertTitle() {
+	}// end TitleUpdateFrame()
+	
+	private void titleUpdate() {
+		int tNo = no;
+		System.out.println(tNo);
 		String name = txtName.getText();
 		String rate = txtRating.getText();
 		String genre = txtGenre.getText();
@@ -155,31 +166,24 @@ public class TitleInsertFrame extends JFrame{
 		int like = Integer.parseInt(txtLike.getText());
 		System.out.println(like);
 		String star = txtStar.getText();
-//		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		String rrel = txtRel.getText();
 		java.sql.Date rel = java.sql.Date.valueOf(rrel); // * 문자열을 DB에 date로 날려주기
-//		java.util.Date rel = null;
-//		try {
-//			rel = Date.v;
-//		} catch (ParseException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
 		String ott = txtOtt.getText();
 		
-		TitleDTO dto = new TitleDTO(0, name, rate, genre, info,
+		TitleDTO dto = new TitleDTO(tNo, name, rate, genre, info,
 				like, star, rel, ott);
 		
-		int result = dao.insert(dto);
+		int result = dao.update(tNo, dto);
 		System.out.println(result);
 		if(result == 1) {
 			System.out.println("insertTitle()값 : " + result);
-			JOptionPane.showMessageDialog(frame, "등록되었습니다.", "알림", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(frame, "수정되었습니다.", "알림", JOptionPane.INFORMATION_MESSAGE);
 			dispose();
 		}else {
 			System.out.println("가입 정보 부족");
 			JOptionPane.showMessageDialog(frame, "정보를 정확히 입력해 주세요.", "알림", JOptionPane.ERROR_MESSAGE);
 		}
 		
-	}// end insertTitle()
-}// end InsertTitleFrame
+	}// end titleUpdate()
+	
+}// end TitleUpdateFrame
