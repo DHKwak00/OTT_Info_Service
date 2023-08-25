@@ -16,13 +16,18 @@ public interface OracleQuery {
 	public static final String TABLE_TITLE = "TITLE";
 	public static final String COL_TITLE_NO = "TITLE_NO";
 	public static final String COL_TITLE_NAME = "TITLE_NAME";
+	public static final String COL_TITLE_LIKE = "TITLE_LIKE";
 	public static final String COL_TITLE_RATING = "TITLE_RATING";
 	public static final String COL_TITLE_GENRE = "TITLE_GENRE";
 	public static final String COL_TITLE_INFO = "TITLE_INFO";
-	public static final String COL_TITLE_LIKE = "TITLE_LIKE";
 	public static final String COL_TITLE_STAR = "TITLE_STAR";
 	public static final String COL_TITLE_RELEASE = "TITLE_RELEASE";
 	public static final String COL_TITLE_OTT = "TITLE_OTT";
+	
+	public static final String TABLE_LIKEIT = "LIKEIT";
+	public static final String COL_LIKE_NO = "LIKE_NO";
+	public static final String COL_LIKE_MEMID = "MEMBER_ID";
+	public static final String COL_LIKE_TITLE = "TITLE_NAME";
 	
 	
 	// 회원 가입
@@ -102,10 +107,10 @@ public interface OracleQuery {
 	public static final String TITLE_UPDATE = 
 			"UPDATE " + TABLE_TITLE + " SET " +
 					COL_TITLE_NAME + " = ?, " +
+					COL_TITLE_LIKE + " = ?, " +
 					COL_TITLE_RATING + " = ?, " +
 					COL_TITLE_GENRE + " = ?, " +
 					COL_TITLE_INFO + " = ?, " +
-					COL_TITLE_LIKE + " = ?, " +
 					COL_TITLE_STAR + " = ?, " +
 					COL_TITLE_RELEASE + " = ?, " +
 					COL_TITLE_OTT + " = ? " +

@@ -16,26 +16,28 @@ TITLE_OTT(VARCHER2(20)) : 시청 가능한 OTT (넷플릭스, 왓챠, 디즈니)
 public class TitleDTO {
 	private int titleNo;
 	private String titleName;
+	private int titleLike;
 	private String titleRating;
 	private String titleGenre;
 	private String titleInfo;
-	private int titleLike;
 	private String titleStar;
 	private Date titleRel;
 	private String titleott;
 	
-	public TitleDTO() {}
+	public TitleDTO() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
-	public TitleDTO(int titleNo, String titleName, String titleRating, 
-			String titleGenre, String titleInfo,int titleLike, 
-			String titleStar, Date titleRel, String titleott) {
+	public TitleDTO(int titleNo, String titleName, int titleLike, String titleRating, String titleGenre,
+			String titleInfo, String titleStar, Date titleRel, String titleott) {
 		super();
 		this.titleNo = titleNo;
 		this.titleName = titleName;
+		this.titleLike = titleLike;
 		this.titleRating = titleRating;
 		this.titleGenre = titleGenre;
 		this.titleInfo = titleInfo;
-		this.titleLike = titleLike;
 		this.titleStar = titleStar;
 		this.titleRel = titleRel;
 		this.titleott = titleott;
@@ -55,6 +57,14 @@ public class TitleDTO {
 
 	public void setTitleName(String titleName) {
 		this.titleName = titleName;
+	}
+
+	public int getTitleLike() {
+		return titleLike;
+	}
+
+	public void setTitleLike(int titleLike) {
+		this.titleLike = titleLike;
 	}
 
 	public String getTitleRating() {
@@ -79,14 +89,6 @@ public class TitleDTO {
 
 	public void setTitleInfo(String titleInfo) {
 		this.titleInfo = titleInfo;
-	}
-
-	public int getTitleLike() {
-		return titleLike;
-	}
-
-	public void setTitleLike(int titleLike) {
-		this.titleLike = titleLike;
 	}
 
 	public String getTitleStar() {
@@ -115,9 +117,12 @@ public class TitleDTO {
 
 	@Override
 	public String toString() {
-		return "TitleDTO [titleNo=" + titleNo + ", titleName=" + titleName + ", titleRating=" + titleRating
-				+ ", titleGenre=" + titleGenre + ", titleInfo=" + titleInfo + ", titleLike=" + titleLike
+		return "TitleDTO [titleNo=" + titleNo + ", titleName=" + titleName + ", titleLike=" + titleLike
+				+ ", titleRating=" + titleRating + ", titleGenre=" + titleGenre + ", titleInfo=" + titleInfo
 				+ ", titleStar=" + titleStar + ", titleRel=" + titleRel + ", titleott=" + titleott + "]";
 	}
+	
+	
+	
 	
 }

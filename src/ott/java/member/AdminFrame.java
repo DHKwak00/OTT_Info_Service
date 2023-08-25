@@ -24,7 +24,7 @@ public class AdminFrame extends JFrame {
 
 	private JFrame frame;
 	private JTable table;
-	private String[] colNames = { "No", "작품명", "등급", "장르", "작품설명", "좋아요", "평점", "개봉일", "OTT" };
+	private String[] colNames = { "No", "작품명", "좋아요", "등급", "장르", "작품설명", "평점", "개봉일", "OTT" };
 	private Object[] records = new Object[colNames.length];
 	private DefaultTableModel tableModel; // 테이블 모델 변수
 
@@ -115,10 +115,10 @@ public class AdminFrame extends JFrame {
 		for (int i = 0; i < list.size(); i++) {
 			records[0] = list.get(i).getTitleNo();
 			records[1] = list.get(i).getTitleName();
-			records[2] = list.get(i).getTitleRating();
-			records[3] = list.get(i).getTitleGenre();
-			records[4] = list.get(i).getTitleInfo();
-			records[5] = list.get(i).getTitleLike();
+			records[2] = list.get(i).getTitleLike();
+			records[3] = list.get(i).getTitleRating();
+			records[4] = list.get(i).getTitleGenre();
+			records[5] = list.get(i).getTitleInfo();
 			records[6] = list.get(i).getTitleStar();
 			records[7] = list.get(i).getTitleRel();
 			records[8] = list.get(i).getTitleott();
@@ -137,15 +137,15 @@ public class AdminFrame extends JFrame {
 		// 선택한 셀의 행의 값을 DTO로 포장하기
 		int no = (int) tableModel.getValueAt(row, 0);
 		String name = (String) tableModel.getValueAt(row, 1);
-		String rate = (String) tableModel.getValueAt(row, 2);
-		String genre = (String) tableModel.getValueAt(row, 3);
-		String info = (String) tableModel.getValueAt(row, 4);
-		int like = (int) tableModel.getValueAt(row, 5);
+		int like = (int) tableModel.getValueAt(row, 2);
+		String rate = (String) tableModel.getValueAt(row, 3);
+		String genre = (String) tableModel.getValueAt(row, 4);
+		String info = (String) tableModel.getValueAt(row, 5);
 		String star = (String) tableModel.getValueAt(row, 6);
 		Date rel = (Date) tableModel.getValueAt(row, 7);
 		String ott = (String) tableModel.getValueAt(row, 8);
 
-		TitleDTO dto = new TitleDTO(no, name, rate, genre, info, like, star, rel, ott);
+		TitleDTO dto = new TitleDTO(no, name, like, rate, genre, info, star, rel, ott);
 		System.out.println(dto.getTitleNo());
 		
 		TitleUpdateFrame updateFrame = new TitleUpdateFrame(dto);

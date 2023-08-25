@@ -42,17 +42,21 @@ public class TitleDAOImple implements TitleDAO, OracleQuery {
 
 			pstmt = conn.prepareStatement(TITLE_INSERT);
 
-			pstmt.setString(1, dto.getTitleName());
-			pstmt.setString(2, dto.getTitleRating());
-			pstmt.setString(3, dto.getTitleGenre());
-			pstmt.setString(4, dto.getTitleInfo());
-			pstmt.setInt(5, dto.getTitleLike());
-			pstmt.setString(6, dto.getTitleStar());
-			pstmt.setDate(7, (java.sql.Date) dto.getTitleRel());
-			pstmt.setString(8, dto.getTitleott());
-
-			result = pstmt.executeUpdate();
-			System.out.println("값 : " + result + " 행 삽입 완료");
+			if(dto.getTitleName().isEmpty() || dto.getTitleRating().isEmpty() || dto.getTitleGenre().isEmpty()) {
+				result = -1;
+			}else {
+				pstmt.setString(1, dto.getTitleName());
+				pstmt.setInt(2, dto.getTitleLike());
+				pstmt.setString(3, dto.getTitleRating());
+				pstmt.setString(4, dto.getTitleGenre());
+				pstmt.setString(5, dto.getTitleInfo());
+				pstmt.setString(6, dto.getTitleStar());
+				pstmt.setDate(7, (java.sql.Date) dto.getTitleRel());
+				pstmt.setString(8, dto.getTitleott());
+				
+				result = pstmt.executeUpdate();
+				System.out.println("값 : " + result + " 행 삽입 완료");
+			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -97,15 +101,15 @@ public class TitleDAOImple implements TitleDAO, OracleQuery {
 			while (rs.next()) { // 레코드가 존재할 때까지
 				int titleNo = rs.getInt(1);
 				String titleName = rs.getString(2);
-				String titleRating = rs.getString(3);
-				String titleGenre = rs.getString(4);
-				String titleInfo = rs.getString(5);
-				int titleLike = rs.getInt(6);
+				int titleLike = rs.getInt(3);
+				String titleRating = rs.getString(4);
+				String titleGenre = rs.getString(5);
+				String titleInfo = rs.getString(6);
 				String titleStar = rs.getString(7);
 				Date titleRel = rs.getDate(8);
 				String titleott = rs.getString(9);
 
-				TitleDTO dto = new TitleDTO(titleNo, titleName, titleRating, titleGenre, titleInfo, titleLike,
+				TitleDTO dto = new TitleDTO(titleNo, titleName,  titleLike, titleRating, titleGenre, titleInfo,
 						titleStar, titleRel, titleott);
 				list.add(dto);
 			}
@@ -159,15 +163,15 @@ public class TitleDAOImple implements TitleDAO, OracleQuery {
 			while (rs.next()) { // 레코드가 존재할 때까지
 				int titleNo = rs.getInt(1);
 				String titleName = rs.getString(2);
-				String titleRating = rs.getString(3);
-				String titleGenre = rs.getString(4);
-				String titleInfo = rs.getString(5);
-				int titleLike = rs.getInt(6);
+				int titleLike = rs.getInt(3);
+				String titleRating = rs.getString(4);
+				String titleGenre = rs.getString(5);
+				String titleInfo = rs.getString(6);
 				String titleStar = rs.getString(7);
 				Date titleRel = rs.getDate(8);
 				String titleott = rs.getString(9);
 
-				TitleDTO dto = new TitleDTO(titleNo, titleName, titleRating, titleGenre, titleInfo, titleLike,
+				TitleDTO dto = new TitleDTO(titleNo, titleName, titleLike, titleRating, titleGenre, titleInfo, 
 						titleStar, titleRel, titleott);
 				list.add(dto);
 			}
@@ -221,16 +225,16 @@ public class TitleDAOImple implements TitleDAO, OracleQuery {
 			while (rs.next()) { // 레코드가 존재할 때까지
 				int titleNo = rs.getInt(1);
 				String titleName = rs.getString(2);
-				String titleRating = rs.getString(3);
-				String titleGenre = rs.getString(4);
-				String titleInfo = rs.getString(5);
-				int titleLike = rs.getInt(6);
+				int titleLike = rs.getInt(3);
+				String titleRating = rs.getString(4);
+				String titleGenre = rs.getString(5);
+				String titleInfo = rs.getString(6);
 				String titleStar = rs.getString(7);
 				Date titleRel = rs.getDate(8);
 				String titleott = rs.getString(9);
 
-				TitleDTO dto = new TitleDTO(titleNo, titleName, titleRating, titleGenre, titleInfo, titleLike,
-						titleStar, titleRel, titleott);
+				TitleDTO dto = new TitleDTO(titleNo, titleName,  titleLike, titleRating, titleGenre,
+						 titleInfo, titleStar, titleRel, titleott);
 				list.add(dto);
 			}
 		} catch (SQLException e) {
@@ -276,16 +280,16 @@ public class TitleDAOImple implements TitleDAO, OracleQuery {
 			while (rs.next()) { // 레코드가 존재할 때까지
 				int titleNo = rs.getInt(1);
 				searchName = rs.getString(2);
-				String titleRating = rs.getString(3);
-				String titleGenre = rs.getString(4);
-				String titleInfo = rs.getString(5);
-				int titleLike = rs.getInt(6);
+				int titleLike = rs.getInt(3);
+				String titleRating = rs.getString(4);
+				String titleGenre = rs.getString(5);
+				String titleInfo = rs.getString(6);
 				String titleStar = rs.getString(7);
 				Date titleRel = rs.getDate(8);
 				String titleott = rs.getString(9);
 
-				TitleDTO dto = new TitleDTO(titleNo, searchName, titleRating, titleGenre, titleInfo, titleLike,
-						titleStar, titleRel, titleott);
+				TitleDTO dto = new TitleDTO(titleNo, searchName, titleLike, titleRating, titleGenre,
+						 titleInfo, titleStar, titleRel, titleott);
 				list.add(dto);
 			}
 
@@ -329,16 +333,16 @@ public class TitleDAOImple implements TitleDAO, OracleQuery {
 			if (rs.next()) {
 				int titleNo = rs.getInt(1);
 				String titleName = rs.getString(2);
-				String titleRating = rs.getString(3);
-				titleGenre = rs.getString(4);
-				String titleInfo = rs.getString(5);
-				int titleLike = rs.getInt(6);
+				int titleLike = rs.getInt(3);
+				String titleRating = rs.getString(4);
+				titleGenre = rs.getString(5);
+				String titleInfo = rs.getString(6);
 				String titleStar = rs.getString(7);
 				Date titleRel = rs.getDate(8);
 				String titleott = rs.getString(9);
 
-				dto = new TitleDTO(titleNo, titleName, titleRating, titleGenre, titleInfo, titleLike, titleStar,
-						titleRel, titleott);
+				dto = new TitleDTO(titleNo, titleName,  titleLike, titleRating, titleGenre, titleInfo,
+							titleStar, titleRel, titleott);
 			}
 
 		} catch (SQLException e) {
@@ -375,10 +379,10 @@ public class TitleDAOImple implements TitleDAO, OracleQuery {
 			pstmt = conn.prepareStatement(TITLE_UPDATE);
 
 			pstmt.setString(1, dto.getTitleName());
-			pstmt.setString(2, dto.getTitleRating());
-			pstmt.setString(3, dto.getTitleGenre());
-			pstmt.setString(4, dto.getTitleInfo());
-			pstmt.setInt(5, dto.getTitleLike());
+			pstmt.setInt(2, dto.getTitleLike());
+			pstmt.setString(3, dto.getTitleRating());
+			pstmt.setString(4, dto.getTitleGenre());
+			pstmt.setString(5, dto.getTitleInfo());
 			pstmt.setString(6, dto.getTitleStar());
 			pstmt.setDate(7, (java.sql.Date) dto.getTitleRel());
 			pstmt.setString(8, dto.getTitleott());

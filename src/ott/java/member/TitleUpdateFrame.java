@@ -18,10 +18,10 @@ public class TitleUpdateFrame extends JFrame{
 	private JFrame frame;
 	
 	private JTextField txtName;
+	private JTextField txtLike;
 	private JTextField txtRating;
 	private JTextField txtGenre;
 	private JTextArea txtInfo;
-	private JTextField txtLike;
 	private JTextField txtStar;
 	private JTextField txtRel;
 	private JTextField txtOtt;
@@ -44,26 +44,25 @@ public class TitleUpdateFrame extends JFrame{
 		lblName.setBounds(27, 10, 75, 30);
 		getContentPane().add(lblName);
 		
+		JLabel lblLike = new JLabel("좋아요수");
+		lblLike.setFont(new Font("Gulim", Font.PLAIN, 12));
+		lblLike.setBounds(27, 50, 75, 30);
+		getContentPane().add(lblLike);
+		
 		JLabel lblRating = new JLabel("시청 등급");
 		lblRating.setFont(new Font("Gulim", Font.PLAIN, 12));
-		lblRating.setBounds(27, 50, 75, 30);
+		lblRating.setBounds(27, 90, 75, 30);
 		getContentPane().add(lblRating);
 		
 		JLabel lblGenre = new JLabel("장르");
 		lblGenre.setFont(new Font("Gulim", Font.PLAIN, 12));
-		lblGenre.setBounds(27, 90, 75, 30);
+		lblGenre.setBounds(27, 130, 75, 30);
 		getContentPane().add(lblGenre);
 		
 		JLabel lblInfo = new JLabel("작품 설명");
 		lblInfo.setFont(new Font("Gulim", Font.PLAIN, 12));
-		lblInfo.setBounds(27, 130, 75, 30);
+		lblInfo.setBounds(27, 170, 75, 30);
 		getContentPane().add(lblInfo);
-		
-		
-		JLabel lblLike = new JLabel("좋아요수");
-		lblLike.setFont(new Font("Gulim", Font.PLAIN, 12));
-		lblLike.setBounds(27, 285, 75, 30);
-		getContentPane().add(lblLike);
 		
 		JLabel lblStar = new JLabel("평점");
 		lblStar.setFont(new Font("Gulim", Font.PLAIN, 12));
@@ -87,39 +86,41 @@ public class TitleUpdateFrame extends JFrame{
 		txtName.setText(dto.getTitleName());
 		getContentPane().add(txtName);
 		
-		txtRating = new JTextField();
-		txtRating.setFont(new Font("Gulim", Font.PLAIN, 12));
-		txtRating.setBounds(114, 55, 116, 21);
-		txtRating.setColumns(10);
-		txtRating.setText(dto.getTitleRating());
-		getContentPane().add(txtRating);
-		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollPane.setBounds(114, 130, 116, 145);
-		getContentPane().add(scrollPane);
-		
-		txtInfo = new JTextArea();
-		txtInfo.setLineWrap(true);
-		txtInfo.setFont(new Font("굴림", Font.PLAIN, 12));
-		txtInfo.setColumns(10);
-		scrollPane.setViewportView(txtInfo);
-		txtInfo.setText(dto.getTitleInfo());
-		
-		txtGenre = new JTextField();
-		txtGenre.setFont(new Font("Gulim", Font.PLAIN, 12));
-		txtGenre.setBounds(114, 95, 116, 21);
-		txtGenre.setColumns(10);
-		txtGenre.setText(dto.getTitleGenre());
-		getContentPane().add(txtGenre);
-		
 		txtLike = new JTextField();
 		txtLike.setEditable(false);
 		txtLike.setFont(new Font("Gulim", Font.PLAIN, 12));
 		txtLike.setColumns(10);
-		txtLike.setBounds(114, 290, 116, 21);
+		txtLike.setBounds(114, 55, 116, 21);
 		txtLike.setText(String.valueOf(dto.getTitleLike()));
 		getContentPane().add(txtLike);
+		
+		txtRating = new JTextField();
+		txtRating.setFont(new Font("Gulim", Font.PLAIN, 12));
+		txtRating.setBounds(114, 95, 116, 21);
+		txtRating.setColumns(10);
+		txtRating.setText(dto.getTitleRating());
+		getContentPane().add(txtRating);
+		
+		txtGenre = new JTextField();
+		txtGenre.setFont(new Font("Gulim", Font.PLAIN, 12));
+		txtGenre.setBounds(114, 135, 116, 21);
+		txtGenre.setColumns(10);
+		txtGenre.setText(dto.getTitleGenre());
+		getContentPane().add(txtGenre);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setBounds(114, 170, 116, 145);
+		getContentPane().add(scrollPane);
+		
+		txtInfo = new JTextArea();
+		scrollPane.setViewportView(txtInfo);
+		txtInfo.setLineWrap(true);
+		txtInfo.setFont(new Font("굴림", Font.PLAIN, 12));
+		txtInfo.setColumns(10);
+		txtInfo.setText(dto.getTitleInfo());
+		
+		
 		
 		txtStar = new JTextField();
 		txtStar.setFont(new Font("Gulim", Font.PLAIN, 12));
@@ -158,25 +159,25 @@ public class TitleUpdateFrame extends JFrame{
 	
 	private void titleUpdate() {
 		int tNo = no;
-		System.out.println(tNo);
+//		System.out.println(tNo);
 		String name = txtName.getText();
+		int like = Integer.parseInt(txtLike.getText());
 		String rate = txtRating.getText();
 		String genre = txtGenre.getText();
 		String info = txtInfo.getText();
-		int like = Integer.parseInt(txtLike.getText());
 		System.out.println(like);
 		String star = txtStar.getText();
 		String rrel = txtRel.getText();
 		java.sql.Date rel = java.sql.Date.valueOf(rrel); // * 문자열을 DB에 date로 날려주기
 		String ott = txtOtt.getText();
 		
-		TitleDTO dto = new TitleDTO(tNo, name, rate, genre, info,
-				like, star, rel, ott);
+		TitleDTO dto = new TitleDTO(tNo, name, like, rate, genre, 
+				info, star, rel, ott);
 		
 		int result = dao.update(tNo, dto);
 		System.out.println(result);
 		if(result == 1) {
-			System.out.println("insertTitle()값 : " + result);
+			System.out.println("titleUpdate()값 : " + result);
 			JOptionPane.showMessageDialog(frame, "수정되었습니다.", "알림", JOptionPane.INFORMATION_MESSAGE);
 			dispose();
 		}else {
