@@ -40,6 +40,7 @@ public class OttFrame extends JFrame {
 	private TitleDAO dao;
 
 	public OttFrame(String inId) {
+		// LoginFrame에서 입력값이 넘어와야함.
 
 		dao = TitleDAOImple.getInstance();
 		frame = this;
@@ -48,7 +49,6 @@ public class OttFrame extends JFrame {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
-//		dto = dao.getInfo(getName()); // LoginFrame에서 입력값이 넘어와야함.
 //		System.out.println(dto);
 		JLabel lblNewLabel = new JLabel(inId + " 님 환영합니다.");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.TRAILING);
