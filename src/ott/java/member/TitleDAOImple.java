@@ -445,4 +445,36 @@ public class TitleDAOImple implements TitleDAO, OracleQuery {
 
 	} // end delete()
 
+	// 좋아요
+	@Override
+	public int likeIt(TitleDTO dto) {
+		int result = 0;
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		try {
+			DriverManager.registerDriver(new OracleDriver());
+			System.out.println("드라이버 로드 성공");
+			
+			conn = DriverManager.getConnection(URL, USER, PASSWORD);
+			System.out.println("DB 연결 성공");
+			
+			pstmt = conn.prepareStatement(TITLE_LIKE_IT);
+			
+//			***********************************************************
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return result;
+	}// end like()
+	
+	// 좋아요취소
+	@Override
+	public int likeCancel(TitleDTO dto) {
+		int result = 0;
+		
+		return result;
+	}// end likeCancel()
+
 } // end TitleDAOImple

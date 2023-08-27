@@ -26,5 +26,11 @@ public interface TitleDAO {
 	
 	// 작품 삭제
 	public abstract int delete(int titleNo);
+	
+//	// 좋아요
+//	public abstract int likeIt(TitleDTO dto);
+//	
+//	// 좋아요 취소
+//	public abstract int likeCancel(TitleDTO dto);
 
 }

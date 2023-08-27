@@ -122,8 +122,15 @@ public interface OracleQuery {
 				" WHERE " + COL_TITLE_NO + " = ?";
 		
 	
-	
-	
+	// 좋아요
+		public static final String TITLE_LIKE_IT =
+				"INSERT INTO " + TABLE_LIKEIT +
+				" VALUES(LIKE_SEQ.NEXTVAL, ?, ?)";
+		
+	// 좋아요 취소
+		public static final String TITLE_LIKE_CANCEL =
+				"DELETE " + TABLE_LIKEIT +
+				" WHERE " + COL_LIKE_MEMID + " = ?";
 	
 	
 

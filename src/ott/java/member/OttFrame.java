@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -24,6 +25,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 public class OttFrame extends JFrame {
@@ -128,7 +130,7 @@ public class OttFrame extends JFrame {
 		JButton btnNewButton = new JButton("❤");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				iLikeThis();
+				iLikeIt();
 			}
 
 		});
@@ -172,8 +174,6 @@ public class OttFrame extends JFrame {
 						Math.max(rendererWidth + getIntercellSpacing().width, tableColumn.getPreferredWidth()));
 				return component;
 			}
-			
-			
 
 		};
 
@@ -244,30 +244,28 @@ public class OttFrame extends JFrame {
 		}
 
 	} // end selectAllTableByName()
-	
+
 	// 검색 제목순
-		private void selectTableByName() { //list.get~
-			
-			ArrayList<TitleDTO> list = dao.selectByName();
-			tableModel.setRowCount(0);
-			
-			
+	private void selectTableByName() { // list.get~
 
-			for (int i = 0; i < list.size(); i++) {
-				records[0] = list.get(i).getTitleNo();
-				records[1] = list.get(i).getTitleName();
-				records[2] = list.get(i).getTitleLike();
-				records[3] = list.get(i).getTitleRating();
-				records[4] = list.get(i).getTitleGenre();
-				records[5] = list.get(i).getTitleInfo();
-				records[6] = list.get(i).getTitleStar();
-				records[7] = list.get(i).getTitleRel();
-				records[8] = list.get(i).getTitleott();
-				tableModel.addRow(records);
+		ArrayList<TitleDTO> list = dao.selectByName();
+		tableModel.setRowCount(0);
 
-			}
+		for (int i = 0; i < list.size(); i++) {
+			records[0] = list.get(i).getTitleNo();
+			records[1] = list.get(i).getTitleName();
+			records[2] = list.get(i).getTitleLike();
+			records[3] = list.get(i).getTitleRating();
+			records[4] = list.get(i).getTitleGenre();
+			records[5] = list.get(i).getTitleInfo();
+			records[6] = list.get(i).getTitleStar();
+			records[7] = list.get(i).getTitleRel();
+			records[8] = list.get(i).getTitleott();
+			tableModel.addRow(records);
 
-		} // end selectAllTableByName()
+		}
+
+	} // end selectAllTableByName()
 
 	// 좋아요순
 	private void selectAllTableByLike() {
@@ -322,8 +320,40 @@ public class OttFrame extends JFrame {
 
 	}// end selectNameTable()
 
-	private void iLikeThis() {
-		// TODO Auto-generated method stub
+	// 좋아요
+	private void iLikeIt(String inId) {
+		// 선택된 셀의 행 번호
+		int row = table.getSelectedRow();
+
+		// 모델 객체 담기
+		TableModel tableModel = table.getModel();
+
+		// 선택한 셀의 행의 값을 DTO로 포장하기
+		int no = (int) tableModel.getValueAt(row, 0);
+		String name = (String) tableModel.getValueAt(row, 1);
+		int like = (int) tableModel.getValueAt(row, 2);
+		String rate = (String) tableModel.getValueAt(row, 3);
+		String genre = (String) tableModel.getValueAt(row, 4);
+		String info = (String) tableModel.getValueAt(row, 5);
+		String star = (String) tableModel.getValueAt(row, 6);
+		Date rel = (Date) tableModel.getValueAt(row, 7);
+		String ott = (String) tableModel.getValueAt(row, 8);
+
+		TitleDTO dto = new TitleDTO(no, name, like, rate, genre, info, star, rel, ott);
+		System.out.println(dto.getTitleNo());
+		
+		int result = dao.likeIt(dto);
+		System.out.println(result);
+		if(result == 1) {
+			System.out.println("iLike()값 : " + result + "좋");
+		}else {
+			System.out.println("오류");
+		}
+		
+		
+		
+		
 
 	}// end iLikeThis()
+
 }// end OttFrame
