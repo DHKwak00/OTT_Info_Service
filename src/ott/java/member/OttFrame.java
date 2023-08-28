@@ -8,7 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -20,13 +19,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.event.RowSorterEvent;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
-import javax.swing.table.TableRowSorter;
 
 public class OttFrame extends JFrame {
 
@@ -39,12 +36,15 @@ public class OttFrame extends JFrame {
 	private Object[] records = new Object[colNames.length];
 	private DefaultTableModel tableModel; // 테이블 모델 변수
 
-	private TitleDAO dao;
+	private MemberDAO mdao;
+	private TitleDAO tdao;
+	private LikeItDAO ldao;
 
 	public OttFrame(String inId) {
 		// LoginFrame에서 입력값이 넘어와야함.
-
-		dao = TitleDAOImple.getInstance();
+		mdao = MemberDAOImple.getInstance();
+		tdao = TitleDAOImple.getInstance();
+		ldao = LikeItDAOImple.getInstance();
 		frame = this;
 		frame.setTitle("OTT 정보 프로그램");
 		frame.setBounds(100, 100, 1366, 480);
@@ -130,7 +130,7 @@ public class OttFrame extends JFrame {
 		JButton btnNewButton = new JButton("❤");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				iLikeIt();
+				iLikeIt(inId);
 			}
 
 		});
@@ -139,6 +139,18 @@ public class OttFrame extends JFrame {
 		btnNewButton.setFont(new Font("Serif", Font.PLAIN, 30));
 		btnNewButton.setBounds(374, 115, 35, 35);
 		getContentPane().add(btnNewButton);
+		
+		// 좋아요 리스트
+		JButton btnLike = new JButton("나의 좋아요 목록");
+		btnLike.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		btnLike.setMargin(new Insets(2, 7, 2, 7));
+		btnLike.setFont(new Font("Gulim", Font.PLAIN, 12));
+		btnLike.setBounds(1207, 127, 130, 23);
+		getContentPane().add(btnLike);
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setForeground(new Color(0, 0, 0));
@@ -187,6 +199,7 @@ public class OttFrame extends JFrame {
 		table.getTableHeader().setResizingAllowed(false);
 		scrollPane.setViewportView(table);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		
 
 		table.getColumn("No").setPreferredWidth(30);
 		table.getColumn("등급").setPreferredWidth(35);
@@ -204,8 +217,8 @@ public class OttFrame extends JFrame {
 
 	// 전체 검색
 	private void selectAllTable() {
-		ArrayList<TitleDTO> list = dao.select();
-		System.out.println(list.toString());
+		ArrayList<TitleDTO> list = tdao.select();
+//		System.out.println(list.toString());
 		tableModel.setRowCount(0);
 		for (int i = 0; i < list.size(); i++) {
 			records[0] = list.get(i).getTitleNo();
@@ -224,7 +237,7 @@ public class OttFrame extends JFrame {
 
 	// 전체 제목순
 	private void selectAllTableByName() {
-		ArrayList<TitleDTO> list = dao.selectByName();
+		ArrayList<TitleDTO> list = tdao.selectByName();
 //		System.out.println(list.toString());
 		System.out.println(Arrays.toString(records));
 		tableModel.setRowCount(0);
@@ -248,7 +261,7 @@ public class OttFrame extends JFrame {
 	// 검색 제목순
 	private void selectTableByName() { // list.get~
 
-		ArrayList<TitleDTO> list = dao.selectByName();
+		ArrayList<TitleDTO> list = tdao.selectByName();
 		tableModel.setRowCount(0);
 
 		for (int i = 0; i < list.size(); i++) {
@@ -269,7 +282,7 @@ public class OttFrame extends JFrame {
 
 	// 좋아요순
 	private void selectAllTableByLike() {
-		ArrayList<TitleDTO> list = dao.selectByLike();
+		ArrayList<TitleDTO> list = tdao.selectByLike();
 //		System.out.println(list.toString());
 		tableModel.setRowCount(0);
 		for (int i = 0; i < list.size(); i++) {
@@ -293,7 +306,7 @@ public class OttFrame extends JFrame {
 		// return 값이 dto (TITLE_NAME 컬럼에 titleName의 값)
 		String searchName = ("%" + txtSearch.getText() + "%");
 		searchName = searchName.toLowerCase();
-		ArrayList<TitleDTO> list = dao.selectTitle(searchName);
+		ArrayList<TitleDTO> list = tdao.selectTitle(searchName);
 //		System.out.println(list.toString());
 		tableModel.setRowCount(0);
 
@@ -327,33 +340,22 @@ public class OttFrame extends JFrame {
 
 		// 모델 객체 담기
 		TableModel tableModel = table.getModel();
-
-		// 선택한 셀의 행의 값을 DTO로 포장하기
-		int no = (int) tableModel.getValueAt(row, 0);
-		String name = (String) tableModel.getValueAt(row, 1);
-		int like = (int) tableModel.getValueAt(row, 2);
-		String rate = (String) tableModel.getValueAt(row, 3);
-		String genre = (String) tableModel.getValueAt(row, 4);
-		String info = (String) tableModel.getValueAt(row, 5);
-		String star = (String) tableModel.getValueAt(row, 6);
-		Date rel = (Date) tableModel.getValueAt(row, 7);
-		String ott = (String) tableModel.getValueAt(row, 8);
-
-		TitleDTO dto = new TitleDTO(no, name, like, rate, genre, info, star, rel, ott);
-		System.out.println(dto.getTitleNo());
 		
-		int result = dao.likeIt(dto);
-		System.out.println(result);
-		if(result == 1) {
-			System.out.println("iLike()값 : " + result + "좋");
+		int mNo = mdao.getInfo(inId).getMemNo();
+		System.out.println(mNo);
+		int tNo = (int) tableModel.getValueAt(row, 0);
+		
+		LikeItDTO ldto = new LikeItDTO(0, mNo, tNo);
+		
+		if(ldto.getMemNo() == ldao.select(mNo).getMemNo()) {
+			ldao.delete(ldto);
+			
+			System.out.println("좋아요 취소");
 		}else {
-			System.out.println("오류");
+			ldao.insert(ldto);
+			System.out.println("좋아요 등록");
 		}
-		
-		
-		
-		
+			
 
 	}// end iLikeThis()
-
 }// end OttFrame

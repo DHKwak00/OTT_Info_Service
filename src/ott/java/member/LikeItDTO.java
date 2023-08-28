@@ -3,16 +3,16 @@ package ott.java.member;
 public class LikeItDTO {
 	
 	private int likeNo;
-	private String memId;
-	private String titleName;
+	private int memNo;
+	private int titleNo;
 	
 	public LikeItDTO() {}
 
-	public LikeItDTO(int likeNo, String memId, String titleName) {
+	public LikeItDTO(int likeNo, int memNo, int titleNo) {
 		super();
 		this.likeNo = likeNo;
-		this.memId = memId;
-		this.titleName = titleName;
+		this.memNo = memNo;
+		this.titleNo = titleNo;
 	}
 
 	public int getLikeNo() {
@@ -23,27 +23,26 @@ public class LikeItDTO {
 		this.likeNo = likeNo;
 	}
 
-	public String getMemId() {
-		return memId;
+	public int getMemNo() {
+		return memNo;
 	}
 
-	public void setMemId(String memId) {
-		this.memId = memId;
+	public void setMemNo(int memNo) {
+		this.memNo = memNo;
 	}
 
-	public String getTitleName() {
-		return titleName;
+	public int getTitleNo() {
+		return titleNo;
 	}
 
-	public void setTitleName(String titleName) {
-		this.titleName = titleName;
+	public void setTitleNo(int titleNo) {
+		this.titleNo = titleNo;
 	}
 
 	@Override
 	public String toString() {
-		return "LikeItDTO [likeNo=" + likeNo + ", memId=" + memId + ", titleName=" + titleName + "]";
+		return "LikeItDTO [likeNo=" + likeNo + ", memNo=" + memNo + ", titleNo=" + titleNo + "]";
 	}
-	
-	
+
 	
 }

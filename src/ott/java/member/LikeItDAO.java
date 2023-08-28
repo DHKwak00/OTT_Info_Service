@@ -6,5 +6,8 @@ public interface LikeItDAO {
 	public abstract int insert(LikeItDTO dto);
 	
 	// 좋아요 취소
-	public abstract int delete(int likeNo);
+	public abstract int delete(LikeItDTO dto);
+
+	// 좋아요 조회
+	public abstract LikeItDTO select(int memNo);
 }

@@ -26,8 +26,8 @@ public interface OracleQuery {
 	
 	public static final String TABLE_LIKEIT = "LIKEIT";
 	public static final String COL_LIKE_NO = "LIKE_NO";
-	public static final String COL_LIKE_MEMID = "MEMBER_ID";
-	public static final String COL_LIKE_TITLE = "TITLE_NAME";
+	public static final String COL_LIKE_MEMID = "MEMBER_NO";
+	public static final String COL_LIKE_TITLE = "TITLE_NO";
 	
 	
 	// 회원 가입
@@ -121,17 +121,28 @@ public interface OracleQuery {
 				"DELETE " + TABLE_TITLE +
 				" WHERE " + COL_TITLE_NO + " = ?";
 		
-	
+	// 좋아요 수
+		public static final String LIKE_SELECT_CONT = // 아디값 타이틀값 
+				"SELECT COUNT(*) FROM " + TABLE_LIKEIT +
+				" WHERE " + COL_LIKE_MEMID + " AND " +
+				COL_LIKE_TITLE;
+		
+	// 좋아요 조회
+		public static final String LIKE_SELECT_ID =
+				"SELECT * FROM " + TABLE_LIKEIT +
+				" WHERE " + COL_LIKE_MEMID + " = ?";
+		
 	// 좋아요
-		public static final String TITLE_LIKE_IT =
+		public static final String LIKE_IT =
 				"INSERT INTO " + TABLE_LIKEIT +
 				" VALUES(LIKE_SEQ.NEXTVAL, ?, ?)";
 		
 	// 좋아요 취소
-		public static final String TITLE_LIKE_CANCEL =
+		public static final String LIKE_CANCEL =
 				"DELETE " + TABLE_LIKEIT +
 				" WHERE " + COL_LIKE_MEMID + " = ?";
 	
-	
+	// pk 값으로 불러오고 가장 최근인걸 알수있는 pk 넘버나 date 
+		
 
 }
