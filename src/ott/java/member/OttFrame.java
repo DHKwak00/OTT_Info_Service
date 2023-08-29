@@ -139,12 +139,12 @@ public class OttFrame extends JFrame {
 		btnNewButton.setFont(new Font("Serif", Font.PLAIN, 30));
 		btnNewButton.setBounds(374, 115, 35, 35);
 		getContentPane().add(btnNewButton);
-		
+
 		// 좋아요 리스트
 		JButton btnLike = new JButton("나의 좋아요 목록");
 		btnLike.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+
 			}
 		});
 		btnLike.setMargin(new Insets(2, 7, 2, 7));
@@ -199,7 +199,6 @@ public class OttFrame extends JFrame {
 		table.getTableHeader().setResizingAllowed(false);
 		scrollPane.setViewportView(table);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		
 
 		table.getColumn("No").setPreferredWidth(30);
 		table.getColumn("등급").setPreferredWidth(35);
@@ -235,71 +234,110 @@ public class OttFrame extends JFrame {
 
 	} // end selectAllTable()
 
-	// 전체 제목순
-	private void selectAllTableByName() {
-		ArrayList<TitleDTO> list = tdao.selectByName();
-//		System.out.println(list.toString());
-		System.out.println(Arrays.toString(records));
-		tableModel.setRowCount(0);
-
-		for (int i = 0; i < list.size(); i++) {
-			records[0] = list.get(i).getTitleNo();
-			records[1] = list.get(i).getTitleName();
-			records[2] = list.get(i).getTitleLike();
-			records[3] = list.get(i).getTitleRating();
-			records[4] = list.get(i).getTitleGenre();
-			records[5] = list.get(i).getTitleInfo();
-			records[6] = list.get(i).getTitleStar();
-			records[7] = list.get(i).getTitleRel();
-			records[8] = list.get(i).getTitleott();
-			tableModel.addRow(records);
-
-		}
-
-	} // end selectAllTableByName()
+//	// 제목순
+//	private void selectAllTableByName() {
+//		ArrayList<TitleDTO> list = tdao.selectByName();
+////		System.out.println(list.toString());
+//		System.out.println(Arrays.toString(records));
+//		tableModel.setRowCount(0);
+//
+//		for (int i = 0; i < list.size(); i++) {
+//			records[0] = list.get(i).getTitleNo();
+//			records[1] = list.get(i).getTitleName();
+//			records[2] = list.get(i).getTitleLike();
+//			records[3] = list.get(i).getTitleRating();
+//			records[4] = list.get(i).getTitleGenre();
+//			records[5] = list.get(i).getTitleInfo();
+//			records[6] = list.get(i).getTitleStar();
+//			records[7] = list.get(i).getTitleRel();
+//			records[8] = list.get(i).getTitleott();
+//			tableModel.addRow(records);
+//
+//		}
+//
+//	} // end selectAllTableByName()
 
 	// 검색 제목순
 	private void selectTableByName() { // list.get~
+		String searchName = ("%" + txtSearch.getText() + "%");
+		searchName = searchName.toLowerCase();
 
-		ArrayList<TitleDTO> list = tdao.selectByName();
 		tableModel.setRowCount(0);
 
-		for (int i = 0; i < list.size(); i++) {
-			records[0] = list.get(i).getTitleNo();
-			records[1] = list.get(i).getTitleName();
-			records[2] = list.get(i).getTitleLike();
-			records[3] = list.get(i).getTitleRating();
-			records[4] = list.get(i).getTitleGenre();
-			records[5] = list.get(i).getTitleInfo();
-			records[6] = list.get(i).getTitleStar();
-			records[7] = list.get(i).getTitleRel();
-			records[8] = list.get(i).getTitleott();
-			tableModel.addRow(records);
+		if (txtSearch.getText().isEmpty()) {
+			ArrayList<TitleDTO> list = tdao.selectByAllName();
+			for (int i = 0; i < list.size(); i++) {
+				records[0] = list.get(i).getTitleNo();
+				records[1] = list.get(i).getTitleName();
+				records[2] = list.get(i).getTitleLike();
+				records[3] = list.get(i).getTitleRating();
+				records[4] = list.get(i).getTitleGenre();
+				records[5] = list.get(i).getTitleInfo();
+				records[6] = list.get(i).getTitleStar();
+				records[7] = list.get(i).getTitleRel();
+				records[8] = list.get(i).getTitleott();
+				tableModel.addRow(records);
+			}
+		} else {
+			ArrayList<TitleDTO> list = tdao.selectByName(searchName);
+			for (int i = 0; i < list.size(); i++) {
+				records[0] = list.get(i).getTitleNo();
+				records[1] = list.get(i).getTitleName();
+				records[2] = list.get(i).getTitleLike();
+				records[3] = list.get(i).getTitleRating();
+				records[4] = list.get(i).getTitleGenre();
+				records[5] = list.get(i).getTitleInfo();
+				records[6] = list.get(i).getTitleStar();
+				records[7] = list.get(i).getTitleRel();
+				records[8] = list.get(i).getTitleott();
+				tableModel.addRow(records);
+			}
 
 		}
 
 	} // end selectAllTableByName()
 
+	
 	// 좋아요순
 	private void selectAllTableByLike() {
-		ArrayList<TitleDTO> list = tdao.selectByLike();
+		String searchName = ("%" + txtSearch.getText() + "%");
+		searchName = searchName.toLowerCase();
 //		System.out.println(list.toString());
 		tableModel.setRowCount(0);
-		for (int i = 0; i < list.size(); i++) {
-			records[0] = list.get(i).getTitleNo();
-			records[1] = list.get(i).getTitleName();
-			records[2] = list.get(i).getTitleLike();
-			records[3] = list.get(i).getTitleRating();
-			records[4] = list.get(i).getTitleGenre();
-			records[5] = list.get(i).getTitleInfo();
-			records[6] = list.get(i).getTitleStar();
-			records[7] = list.get(i).getTitleRel();
-			records[8] = list.get(i).getTitleott();
-			tableModel.addRow(records);
+		if(txtSearch.getText().isEmpty()) {
+			ArrayList<TitleDTO> list = tdao.selectByAllLike();
+			for (int i = 0; i < list.size(); i++) {
+				records[0] = list.get(i).getTitleNo();
+				records[1] = list.get(i).getTitleName();
+				records[2] = list.get(i).getTitleLike();
+				records[3] = list.get(i).getTitleRating();
+				records[4] = list.get(i).getTitleGenre();
+				records[5] = list.get(i).getTitleInfo();
+				records[6] = list.get(i).getTitleStar();
+				records[7] = list.get(i).getTitleRel();
+				records[8] = list.get(i).getTitleott();
+				tableModel.addRow(records);
+			}
+		}else {
+			ArrayList<TitleDTO> list = tdao.selectByLike(searchName);
+			for (int i = 0; i < list.size(); i++) {
+				records[0] = list.get(i).getTitleNo();
+				records[1] = list.get(i).getTitleName();
+				records[2] = list.get(i).getTitleLike();
+				records[3] = list.get(i).getTitleRating();
+				records[4] = list.get(i).getTitleGenre();
+				records[5] = list.get(i).getTitleInfo();
+				records[6] = list.get(i).getTitleStar();
+				records[7] = list.get(i).getTitleRel();
+				records[8] = list.get(i).getTitleott();
+				tableModel.addRow(records);
+			}
+			
 		}
 
 	} // end selectAllTable()
 
+	// 검색
 	private void selectNameTable() {
 		// 텍스트필드에 입력값이 검색버튼 -> selectNameTable() 메소드에서
 		// String titleName에 담기고 dao.selectTitle(titleName)로 보내져,
@@ -340,22 +378,22 @@ public class OttFrame extends JFrame {
 
 		// 모델 객체 담기
 		TableModel tableModel = table.getModel();
-		
+
 		int mNo = mdao.getInfo(inId).getMemNo();
-		System.out.println(mNo);
+		System.out.println("로그인 아이디 값 : " + mNo);
 		int tNo = (int) tableModel.getValueAt(row, 0);
-		
+		System.out.println(tNo);
+
 		LikeItDTO ldto = new LikeItDTO(0, mNo, tNo);
-		
-		if(ldto.getMemNo() == ldao.select(mNo).getMemNo()) {
+
+		if (ldto.getMemNo() == ldao.select(mNo).getMemNo() && ldto.getTitleNo() == ldao.select(mNo).getTitleNo()) {
 			ldao.delete(ldto);
-			
+
 			System.out.println("좋아요 취소");
-		}else {
+		} else {
 			ldao.insert(ldto);
 			System.out.println("좋아요 등록");
 		}
-			
 
 	}// end iLikeThis()
 }// end OttFrame

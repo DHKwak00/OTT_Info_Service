@@ -16,6 +16,7 @@ import javax.swing.JTextField;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.JComboBox;
 
 public class TitleInsertFrame extends JFrame {
 
@@ -31,6 +32,8 @@ public class TitleInsertFrame extends JFrame {
 	private JTextField txtOtt;
 
 	private TitleDAO dao;
+	
+	String[] genre = {"액션", "모험", "판타지", "전쟁", "공포", "스릴러", "멜로", "코미디", "애니메이션"};
 
 	public TitleInsertFrame() {
 		dao = TitleDAOImple.getInstance();
@@ -99,11 +102,17 @@ public class TitleInsertFrame extends JFrame {
 		txtRating.setColumns(10);
 		txtRating.setBounds(114, 95, 116, 21);
 		getContentPane().add(txtRating);
+		
+		JComboBox genCombo = new JComboBox(genre);
+		genCombo.getSelectedItem().toString();
+		genCombo.setBounds(114, 134, 116, 23);
+		getContentPane().add(genCombo);
+
 
 		txtGenre = new JTextField();
 		txtGenre.setFont(new Font("Gulim", Font.PLAIN, 12));
 		txtGenre.setColumns(10);
-		txtGenre.setBounds(114, 130, 116, 21);
+		txtGenre.setBounds(12, 280, 116, 21);
 		getContentPane().add(txtGenre);
 
 		JScrollPane scrollPane = new JScrollPane();
@@ -144,7 +153,8 @@ public class TitleInsertFrame extends JFrame {
 		});
 		btnInsert.setBounds(150, 443, 97, 23);
 		getContentPane().add(btnInsert);
-
+		
+		
 	}
 
 	private void insertTitle() {
@@ -152,7 +162,7 @@ public class TitleInsertFrame extends JFrame {
 		String name = txtName.getText();
 //		int like = Integer.parseInt(txtLike.getText());
 		String rate = txtRating.getText();
-		String genre = txtGenre.getText();
+		String genre = genCombo;
 //		System.out.println(txtInfo.getText());
 		String info = txtInfo.getText();
 //		System.out.println(like);
@@ -193,7 +203,7 @@ public class TitleInsertFrame extends JFrame {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
-		
+
 		TitleDTO dto = new TitleDTO(0, name, 0, rate, genre, info, star, rel, ott);
 
 		int result = dao.insert(dto);

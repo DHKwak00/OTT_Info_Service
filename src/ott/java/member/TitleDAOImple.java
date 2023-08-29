@@ -41,9 +41,9 @@ public class TitleDAOImple implements TitleDAO, OracleQuery {
 
 			pstmt = conn.prepareStatement(TITLE_INSERT);
 
-			if(dto.getTitleName().isEmpty() || dto.getTitleRating().isEmpty() || dto.getTitleGenre().isEmpty()) {
+			if (dto.getTitleName().isEmpty() || dto.getTitleRating().isEmpty() || dto.getTitleGenre().isEmpty()) {
 				result = -1;
-			}else {
+			} else {
 				pstmt.setString(1, dto.getTitleName());
 				pstmt.setInt(2, dto.getTitleLike());
 				pstmt.setString(3, dto.getTitleRating());
@@ -52,7 +52,7 @@ public class TitleDAOImple implements TitleDAO, OracleQuery {
 				pstmt.setString(6, dto.getTitleStar());
 				pstmt.setDate(7, (java.sql.Date) dto.getTitleRel());
 				pstmt.setString(8, dto.getTitleott());
-				
+
 				result = pstmt.executeUpdate();
 				System.out.println("값 : " + result + " 행 삽입 완료");
 			}
@@ -108,7 +108,7 @@ public class TitleDAOImple implements TitleDAO, OracleQuery {
 				Date titleRel = rs.getDate(8);
 				String titleott = rs.getString(9);
 
-				TitleDTO dto = new TitleDTO(titleNo, titleName,  titleLike, titleRating, titleGenre, titleInfo,
+				TitleDTO dto = new TitleDTO(titleNo, titleName, titleLike, titleRating, titleGenre, titleInfo,
 						titleStar, titleRel, titleott);
 				list.add(dto);
 			}
@@ -135,7 +135,127 @@ public class TitleDAOImple implements TitleDAO, OracleQuery {
 
 	// 작품 전체 검색 (제목순)
 	@Override
-	public ArrayList<TitleDTO> selectByName() {
+	public ArrayList<TitleDTO> selectByAllName() {
+		ArrayList<TitleDTO> list = null;
+
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+			// JDBC 드라이버를 메모리에 로드
+			DriverManager.registerDriver(new OracleDriver());
+			System.out.println("드라이버 로드 성공");
+
+			// DB와 연결
+			conn = DriverManager.getConnection(URL, USER, PASSWORD);
+			System.out.println("DB 연결 성공");
+
+			// Connection 객체를 사용하여 Statement 객체를 생성
+			pstmt = conn.prepareStatement(TITLE_SELECT_ALL_NAME);
+			System.out.println(TITLE_SELECT_ALL_NAME);
+
+			// SQL 문장 실행(DB 서버로 SQL 전송)
+			rs = pstmt.executeQuery();
+
+			list = new ArrayList<>();
+			while (rs.next()) { // 레코드가 존재할 때까지
+				int titleNo = rs.getInt(1);
+				String titleName = rs.getString(2);
+				int titleLike = rs.getInt(3);
+				String titleRating = rs.getString(4);
+				String titleGenre = rs.getString(5);
+				String titleInfo = rs.getString(6);
+				String titleStar = rs.getString(7);
+				Date titleRel = rs.getDate(8);
+				String titleott = rs.getString(9);
+
+				TitleDTO dto = new TitleDTO(titleNo, titleName, titleLike, titleRating, titleGenre, titleInfo,
+						titleStar, titleRel, titleott);
+				list.add(dto);
+			}
+//						for(TitleDTO dto:list) {
+//							System.out.println(dto);
+//						}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				rs.close();
+				pstmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return list;
+	}
+
+	// 작품 전체 검색 (좋아요순)
+	@Override
+	public ArrayList<TitleDTO> selectByAllLike() {
+		ArrayList<TitleDTO> list = null;
+
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+			// JDBC 드라이버를 메모리에 로드
+			DriverManager.registerDriver(new OracleDriver());
+			System.out.println("드라이버 로드 성공");
+
+			// DB와 연결
+			conn = DriverManager.getConnection(URL, USER, PASSWORD);
+			System.out.println("DB 연결 성공");
+
+			// Connection 객체를 사용하여 Statement 객체를 생성
+			pstmt = conn.prepareStatement(TITLE_SELECT_ALL_LIKE);
+			System.out.println(TITLE_SELECT_ALL_LIKE);
+
+			// SQL 문장 실행(DB 서버로 SQL 전송)
+			rs = pstmt.executeQuery();
+
+			list = new ArrayList<>();
+			while (rs.next()) { // 레코드가 존재할 때까지
+				int titleNo = rs.getInt(1);
+				String titleName = rs.getString(2);
+				int titleLike = rs.getInt(3);
+				String titleRating = rs.getString(4);
+				String titleGenre = rs.getString(5);
+				String titleInfo = rs.getString(6);
+				String titleStar = rs.getString(7);
+				Date titleRel = rs.getDate(8);
+				String titleott = rs.getString(9);
+
+				TitleDTO dto = new TitleDTO(titleNo, titleName, titleLike, titleRating, titleGenre, titleInfo,
+						titleStar, titleRel, titleott);
+				list.add(dto);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				rs.close();
+				pstmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return list;
+	}// end selectByAllLike()
+
+	// 작품 검색 (제목순)
+	@Override
+	public ArrayList<TitleDTO> selectByName(String searchName) {
 		ArrayList<TitleDTO> list = null;
 
 		Connection conn = null;
@@ -155,6 +275,8 @@ public class TitleDAOImple implements TitleDAO, OracleQuery {
 			pstmt = conn.prepareStatement(TITLE_SELECT_NAME);
 			System.out.println(TITLE_SELECT_NAME);
 
+			pstmt.setString(1, searchName);
+
 			// SQL 문장 실행(DB 서버로 SQL 전송)
 			rs = pstmt.executeQuery();
 
@@ -170,7 +292,7 @@ public class TitleDAOImple implements TitleDAO, OracleQuery {
 				Date titleRel = rs.getDate(8);
 				String titleott = rs.getString(9);
 
-				TitleDTO dto = new TitleDTO(titleNo, titleName, titleLike, titleRating, titleGenre, titleInfo, 
+				TitleDTO dto = new TitleDTO(titleNo, titleName, titleLike, titleRating, titleGenre, titleInfo,
 						titleStar, titleRel, titleott);
 				list.add(dto);
 			}
@@ -195,9 +317,9 @@ public class TitleDAOImple implements TitleDAO, OracleQuery {
 		return list;
 	}
 
-	// 작품 전체 검색 (좋아요순)
+	// 작품 검색 (좋아요순)
 	@Override
-	public ArrayList<TitleDTO> selectByLike() {
+	public ArrayList<TitleDTO> selectByLike(String searchName) {
 		ArrayList<TitleDTO> list = null;
 
 		Connection conn = null;
@@ -217,6 +339,8 @@ public class TitleDAOImple implements TitleDAO, OracleQuery {
 			pstmt = conn.prepareStatement(TITLE_SELECT_LIKE);
 			System.out.println(TITLE_SELECT_LIKE);
 
+			pstmt.setString(1, searchName);
+
 			// SQL 문장 실행(DB 서버로 SQL 전송)
 			rs = pstmt.executeQuery();
 
@@ -232,8 +356,8 @@ public class TitleDAOImple implements TitleDAO, OracleQuery {
 				Date titleRel = rs.getDate(8);
 				String titleott = rs.getString(9);
 
-				TitleDTO dto = new TitleDTO(titleNo, titleName,  titleLike, titleRating, titleGenre,
-						 titleInfo, titleStar, titleRel, titleott);
+				TitleDTO dto = new TitleDTO(titleNo, titleName, titleLike, titleRating, titleGenre, titleInfo,
+						titleStar, titleRel, titleott);
 				list.add(dto);
 			}
 		} catch (SQLException e) {
@@ -287,8 +411,8 @@ public class TitleDAOImple implements TitleDAO, OracleQuery {
 				Date titleRel = rs.getDate(8);
 				String titleott = rs.getString(9);
 
-				TitleDTO dto = new TitleDTO(titleNo, searchName, titleLike, titleRating, titleGenre,
-						 titleInfo, titleStar, titleRel, titleott);
+				TitleDTO dto = new TitleDTO(titleNo, searchName, titleLike, titleRating, titleGenre, titleInfo,
+						titleStar, titleRel, titleott);
 				list.add(dto);
 			}
 
@@ -340,8 +464,8 @@ public class TitleDAOImple implements TitleDAO, OracleQuery {
 				Date titleRel = rs.getDate(8);
 				String titleott = rs.getString(9);
 
-				dto = new TitleDTO(titleNo, titleName,  titleLike, titleRating, titleGenre, titleInfo,
-							titleStar, titleRel, titleott);
+				dto = new TitleDTO(titleNo, titleName, titleLike, titleRating, titleGenre, titleInfo, titleStar,
+						titleRel, titleott);
 			}
 
 		} catch (SQLException e) {

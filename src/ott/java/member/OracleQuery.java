@@ -26,7 +26,7 @@ public interface OracleQuery {
 	
 	public static final String TABLE_LIKEIT = "LIKEIT";
 	public static final String COL_LIKE_NO = "LIKE_NO";
-	public static final String COL_LIKE_MEMID = "MEMBER_NO";
+	public static final String COL_LIKE_MEMNO = "MEMBER_NO";
 	public static final String COL_LIKE_TITLE = "TITLE_NO";
 	
 	
@@ -83,13 +83,25 @@ public interface OracleQuery {
 			" ORDER BY " + COL_TITLE_NO;
 	
 	// 작품 전체 검색 (제목순)
-	public static final String TITLE_SELECT_NAME = 
+	public static final String TITLE_SELECT_ALL_NAME = 
 			"SELECT * FROM " + TABLE_TITLE + 
 			" ORDER BY " + COL_TITLE_NAME;
 	
 	// 작품 전체 검색 (좋아요순)
+		public static final String TITLE_SELECT_ALL_LIKE = 
+				"SELECT * FROM " + TABLE_TITLE + 
+				" ORDER BY " + COL_TITLE_LIKE + " DESC";
+	
+	// 작품 검색 (제목순)
+	public static final String TITLE_SELECT_NAME = 
+			"SELECT * FROM " + TABLE_TITLE + 
+			" WHERE " + "lower(" + COL_TITLE_NAME + ")" + " LIKE " + "?" +
+			" ORDER BY " + COL_TITLE_NAME;
+	
+	// 작품 검색 (좋아요순)
 		public static final String TITLE_SELECT_LIKE = 
 				"SELECT * FROM " + TABLE_TITLE + 
+				" WHERE " + "lower(" + COL_TITLE_NAME + ")" + " LIKE " + "?" +
 				" ORDER BY " + COL_TITLE_LIKE + " DESC";
 	
 	// 작품 제목 검색
@@ -117,32 +129,50 @@ public interface OracleQuery {
 					" WHERE " + COL_TITLE_NO + " = ?";
 	
 	// 작품 삭제
-		public static final String TITLE_DELETE =
-				"DELETE " + TABLE_TITLE +
-				" WHERE " + COL_TITLE_NO + " = ?";
+	public static final String TITLE_DELETE =
+			"DELETE " + TABLE_TITLE +
+			" WHERE " + COL_TITLE_NO + " = ?";
 		
 	// 좋아요 수
-		public static final String LIKE_SELECT_CONT = // 아디값 타이틀값 
-				"SELECT COUNT(*) FROM " + TABLE_LIKEIT +
-				" WHERE " + COL_LIKE_MEMID + " AND " +
-				COL_LIKE_TITLE;
+	public static final String LIKE_SELECT_CONT = // 아디값 타이틀값 
+			"SELECT COUNT(*) FROM " + TABLE_LIKEIT +
+			" WHERE " + COL_LIKE_MEMNO + " AND " +
+			COL_LIKE_TITLE;
 		
 	// 좋아요 조회
-		public static final String LIKE_SELECT_ID =
-				"SELECT * FROM " + TABLE_LIKEIT +
-				" WHERE " + COL_LIKE_MEMID + " = ?";
+	public static final String LIKE_SELECT_ID =
+			"SELECT * FROM " + TABLE_LIKEIT +
+			" WHERE " + COL_LIKE_MEMNO + " = ?";
 		
 	// 좋아요
-		public static final String LIKE_IT =
-				"INSERT INTO " + TABLE_LIKEIT +
-				" VALUES(LIKE_SEQ.NEXTVAL, ?, ?)";
+	public static final String LIKE_IT =
+			"INSERT INTO " + TABLE_LIKEIT +
+			" VALUES(LIKE_SEQ.NEXTVAL, ?, ?)";
 		
 	// 좋아요 취소
-		public static final String LIKE_CANCEL =
-				"DELETE " + TABLE_LIKEIT +
-				" WHERE " + COL_LIKE_MEMID + " = ?";
+	public static final String LIKE_CANCEL =
+			"DELETE " + TABLE_LIKEIT +
+			" WHERE " + COL_LIKE_MEMNO + " = ?";
+		
+	// 좋아요 +1 update title set title_like = title.title_like + 1 where title_no = 1;
+	public static final String LIKE_PLS = 
+			"UPDATE " + TABLE_TITLE + 
+			" SET " + COL_TITLE_LIKE + " = TITLE." + COL_TITLE_LIKE + " + 1 " +
+			" WHERE " + COL_TITLE_NO + " = ?";
+		
+	// 좋아요 -1
+	public static final String LIKE_MIN= 
+			"UPDATE " + TABLE_TITLE + 
+			" SET " +  COL_TITLE_LIKE + " = TITLE." + COL_TITLE_LIKE + " - 1 " +
+			" WHERE " + COL_TITLE_NO + " = ?";
+				
 	
 	// pk 값으로 불러오고 가장 최근인걸 알수있는 pk 넘버나 date 
 		
-
+	// 작품들 좋아요 총 갯수
+	public static final String LIKE_TOTAL =
+			"select " + COL_TITLE_NAME + ", (select count(" + 
+			COL_LIKE_MEMNO + ") from " + TABLE_LIKEIT + " b " + 
+			" where b." + COL_LIKE_MEMNO + " = a." + COL_TITLE_NO +
+			")as cnt FROM " + TABLE_TITLE + " a";
 }

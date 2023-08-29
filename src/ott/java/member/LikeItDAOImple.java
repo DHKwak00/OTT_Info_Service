@@ -39,8 +39,14 @@ public class LikeItDAOImple implements LikeItDAO, OracleQuery {
 
 			pstmt.setInt(1, dto.getMemNo());
 			pstmt.setInt(2, dto.getTitleNo());
-
 			result = pstmt.executeUpdate();
+			
+			pstmt.close();
+			
+			pstmt = conn.prepareStatement(LIKE_PLS);
+			pstmt.setInt(1, dto.getTitleNo());
+			result = pstmt.executeUpdate();
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -70,11 +76,17 @@ public class LikeItDAOImple implements LikeItDAO, OracleQuery {
 			System.out.println("로드 성공");
 			conn = DriverManager.getConnection(URL, USER, PASSWORD);
 			System.out.println("DB 연결");
+			
 			pstmt = conn.prepareStatement(LIKE_CANCEL);
-
 			pstmt.setInt(1, dto.getMemNo());
-
 			result = pstmt.executeUpdate();
+			pstmt.close();
+			
+			
+			pstmt = conn.prepareStatement(LIKE_MIN);
+			pstmt.setInt(1, dto.getTitleNo());
+			result = pstmt.executeUpdate();
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -113,6 +125,7 @@ public class LikeItDAOImple implements LikeItDAO, OracleQuery {
 				int titleNo = rs.getInt(3);
 				
 				ldto = new LikeItDTO(likeNo, memNo, titleNo);
+				System.out.println(ldto);
 				// rs close, pstmt 닫고  pstmt 다시 열고
 			}
 		} catch (SQLException e) {
