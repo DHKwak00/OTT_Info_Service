@@ -2,7 +2,7 @@ package ott.java.member;
 
 public interface OracleQuery {
 	public static final String URL =
-			"jdbc:oracle:thin:@localhost:1521:xe";
+			"jdbc:oracle:thin:@172.16.3.15:1521:xe";
 	public static final String USER = "ott";
 	public static final String PASSWORD = "1234";
 	
@@ -175,4 +175,12 @@ public interface OracleQuery {
 			COL_LIKE_MEMNO + ") from " + TABLE_LIKEIT + " b " + 
 			" where b." + COL_LIKE_MEMNO + " = a." + COL_TITLE_NO +
 			")as cnt FROM " + TABLE_TITLE + " a";
+	
+	// 나의 좋아요 리스트
+	public static final String LIKE_LIST = 
+			"SELECT DISTINCT a.*, c." + COL_LIKE_MEMNO + 
+			" FROM " + TABLE_TITLE + " a, " + TABLE_MEMBER + " b, " +
+					TABLE_LIKEIT + " c WHERE c." + COL_LIKE_TITLE + 
+					" = a." + COL_TITLE_NO + " AND c." + COL_LIKE_MEMNO + 
+					" = ?";
 }

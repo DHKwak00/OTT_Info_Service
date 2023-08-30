@@ -73,6 +73,7 @@ public class AdminFrame extends JFrame {
 		btnSearchAll.setBounds(12, 60, 120, 40);
 		frame.getContentPane().add(btnSearchAll);
 
+		// 여기서부터 테이블
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(12, 110, 500, 241);
 		frame.getContentPane().add(scrollPane);
@@ -147,10 +148,10 @@ public class AdminFrame extends JFrame {
 
 		TitleDTO dto = new TitleDTO(no, name, like, rate, genre, info, star, rel, ott);
 		System.out.println(dto.getTitleNo());
-		
+
 		TitleUpdateFrame updateFrame = new TitleUpdateFrame(dto);
 		updateFrame.setVisible(true);
 
 	}// end titleUpdate()
 
-}
+}// end AdminFrame

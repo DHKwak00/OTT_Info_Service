@@ -125,8 +125,8 @@ public class LikeItDAOImple implements LikeItDAO, OracleQuery {
 				int titleNo = rs.getInt(3);
 				
 				ldto = new LikeItDTO(likeNo, memNo, titleNo);
-				System.out.println(ldto);
-				// rs close, pstmt 닫고  pstmt 다시 열고
+				System.out.println("셀렉트" + ldto);
+				
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

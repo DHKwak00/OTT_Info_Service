@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -25,15 +26,17 @@ public class TitleInsertFrame extends JFrame {
 	private JTextField txtName;
 	private JTextField txtLike;
 	private JTextField txtRating;
-	private JTextField txtGenre;
 	private JTextArea txtInfo;
 	private JTextField txtStar;
 	private JTextField txtRel;
-	private JTextField txtOtt;
 
 	private TitleDAO dao;
 	
-	String[] genre = {"액션", "모험", "판타지", "전쟁", "공포", "스릴러", "멜로", "코미디", "애니메이션"};
+	String[] genre = {"", "액션", "모험", "판타지", "전쟁", "공포", "스릴러", "멜로", "코미디", "애니메이션"};
+	String[] ott = {"", "넷플릭스", "디즈니+", "왓챠"};
+	DefaultComboBoxModel<String> model;
+	JComboBox<String> genCombo;
+	JComboBox<String> ottCombo;
 
 	public TitleInsertFrame() {
 		dao = TitleDAOImple.getInstance();
@@ -74,14 +77,14 @@ public class TitleInsertFrame extends JFrame {
 		lblStar.setBounds(27, 325, 75, 30);
 		getContentPane().add(lblStar);
 
-		JLabel lblRel = new JLabel("개봉일");
+		JLabel lblRel = new JLabel("<html>개봉일<br>(yyyy-mm-dd)</html>");
 		lblRel.setFont(new Font("Gulim", Font.PLAIN, 12));
-		lblRel.setBounds(27, 365, 75, 30);
+		lblRel.setBounds(12, 360, 90, 47);
 		getContentPane().add(lblRel);
 
 		JLabel lblOtt = new JLabel("시청 가능 OTT");
 		lblOtt.setFont(new Font("Gulim", Font.PLAIN, 12));
-		lblOtt.setBounds(27, 405, 85, 30);
+		lblOtt.setBounds(12, 405, 85, 30);
 		getContentPane().add(lblOtt);
 
 		txtName = new JTextField();
@@ -103,17 +106,12 @@ public class TitleInsertFrame extends JFrame {
 		txtRating.setBounds(114, 95, 116, 21);
 		getContentPane().add(txtRating);
 		
-		JComboBox genCombo = new JComboBox(genre);
-		genCombo.getSelectedItem().toString();
+		model = new DefaultComboBoxModel<String>(genre);
+		genCombo = new JComboBox<String>(model);
+		genCombo.setFont(new Font("Gulim", Font.PLAIN, 12));
+			
 		genCombo.setBounds(114, 134, 116, 23);
 		getContentPane().add(genCombo);
-
-
-		txtGenre = new JTextField();
-		txtGenre.setFont(new Font("Gulim", Font.PLAIN, 12));
-		txtGenre.setColumns(10);
-		txtGenre.setBounds(12, 280, 116, 21);
-		getContentPane().add(txtGenre);
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -138,12 +136,6 @@ public class TitleInsertFrame extends JFrame {
 		txtRel.setBounds(114, 370, 116, 21);
 		getContentPane().add(txtRel);
 
-		txtOtt = new JTextField();
-		txtOtt.setFont(new Font("Gulim", Font.PLAIN, 12));
-		txtOtt.setColumns(10);
-		txtOtt.setBounds(114, 410, 116, 21);
-		getContentPane().add(txtOtt);
-
 		JButton btnInsert = new JButton("등 록");
 		btnInsert.setFont(new Font("Gulim", Font.PLAIN, 12));
 		btnInsert.addActionListener(new ActionListener() {
@@ -154,6 +146,12 @@ public class TitleInsertFrame extends JFrame {
 		btnInsert.setBounds(150, 443, 97, 23);
 		getContentPane().add(btnInsert);
 		
+		model = new DefaultComboBoxModel<String>(ott);
+		ottCombo = new JComboBox<String>(model);
+		ottCombo.setFont(new Font("Gulim", Font.PLAIN, 12));
+		ottCombo.setBounds(114, 409, 116, 23);
+		getContentPane().add(ottCombo);
+		
 		
 	}
 
@@ -162,7 +160,8 @@ public class TitleInsertFrame extends JFrame {
 		String name = txtName.getText();
 //		int like = Integer.parseInt(txtLike.getText());
 		String rate = txtRating.getText();
-		String genre = genCombo;
+		String genre = (String)genCombo.getSelectedItem();
+		System.out.println("장르값:" + genre);
 //		System.out.println(txtInfo.getText());
 		String info = txtInfo.getText();
 //		System.out.println(like);
@@ -170,12 +169,17 @@ public class TitleInsertFrame extends JFrame {
 //		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 //		String rrel = txtRel.getText();
 		java.sql.Date rel = null;
-		if(txtRel.getText().isEmpty()) {
-			rel = java.sql.Date.valueOf("1900-01-01");
-		}else {
-			rel = java.sql.Date.valueOf(txtRel.getText());
+		
+		try {
+			if(!txtRel.getText().isEmpty()) {
+				rel = java.sql.Date.valueOf(txtRel.getText());
+			}else {
+				rel = java.sql.Date.valueOf("1900-01-01");
+			}
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(frame, "날짜를 정확히 입력해 주세요.", "알림", JOptionPane.ERROR_MESSAGE);
 		}
-		String ott = txtOtt.getText();
+		String ott = (String)ottCombo.getSelectedItem();
 		
 //		try {
 //			String rrel;
@@ -205,16 +209,21 @@ public class TitleInsertFrame extends JFrame {
 //		}
 
 		TitleDTO dto = new TitleDTO(0, name, 0, rate, genre, info, star, rel, ott);
-
-		int result = dao.insert(dto);
-		System.out.println(result);
+		
+		int result;
+		if(dto.getTitleRel()==null) {
+			result = -1;
+		}else {
+			result = dao.insert(dto);
+		}
+//		System.out.println(result);
 		if (result == 1) {
 			System.out.println("insertTitle()값 : " + result);
 			JOptionPane.showMessageDialog(frame, "등록되었습니다.", "알림", JOptionPane.INFORMATION_MESSAGE);
 			dispose();
 		} else {
 			System.out.println("가입 정보 부족");
-			JOptionPane.showMessageDialog(frame, "정보를 정확히 입력해 주세요.", "알림", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(frame, "<html>정보를 정확히 입력해 주세요. <br /> (*표시는 반드시 기입해 주세요.)</html>", "알림", JOptionPane.ERROR_MESSAGE);
 		}
 
 	}// end insertTitle()

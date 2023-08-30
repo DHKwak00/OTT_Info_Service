@@ -33,6 +33,9 @@ public interface TitleDAO {
 	// 작품 삭제
 	public abstract int delete(int titleNo);
 	
+	// 내가 좋아요한 리스트
+	public abstract ArrayList<TitleDTO> selectMyLike(int memNo);
+	
 //	// 좋아요
 //	public abstract int likeIt(TitleDTO dto);
 //	

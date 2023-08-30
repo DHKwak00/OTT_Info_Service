@@ -69,14 +69,14 @@ public class TitleUpdateFrame extends JFrame{
 		lblStar.setBounds(27, 325, 75, 30);
 		getContentPane().add(lblStar);
 		
-		JLabel lblRel = new JLabel("개봉일");
+		JLabel lblRel = new JLabel("<html>개봉일<br>(yyyy-mm-dd)</html>");
 		lblRel.setFont(new Font("Gulim", Font.PLAIN, 12));
-		lblRel.setBounds(27, 365, 75, 30);
+		lblRel.setBounds(12, 365, 90, 30);
 		getContentPane().add(lblRel);
 		
 		JLabel lblOtt = new JLabel("시청 가능 OTT");
 		lblOtt.setFont(new Font("Gulim", Font.PLAIN, 12));
-		lblOtt.setBounds(27, 405, 85, 30);
+		lblOtt.setBounds(12, 405, 85, 30);
 		getContentPane().add(lblOtt);
 		
 		txtName = new JTextField();
@@ -153,6 +153,17 @@ public class TitleUpdateFrame extends JFrame{
 		btnInsert.setBounds(150, 443, 97, 23);
 		getContentPane().add(btnInsert);
 		
+		JButton btnDelete = new JButton("삭 제");
+		btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				titleDelete();
+			}
+
+		});
+		btnDelete.setFont(new Font("Gulim", Font.PLAIN, 12));
+		btnDelete.setBounds(12, 445, 97, 23);
+		getContentPane().add(btnDelete);
+		
 		no = dto.getTitleNo();
 		
 	}// end TitleUpdateFrame()
@@ -165,7 +176,7 @@ public class TitleUpdateFrame extends JFrame{
 		String rate = txtRating.getText();
 		String genre = txtGenre.getText();
 		String info = txtInfo.getText();
-		System.out.println(like);
+//		System.out.println(like);
 		String star = txtStar.getText();
 		String rrel = txtRel.getText();
 		java.sql.Date rel = java.sql.Date.valueOf(rrel); // * 문자열을 DB에 date로 날려주기
@@ -186,5 +197,16 @@ public class TitleUpdateFrame extends JFrame{
 		}
 		
 	}// end titleUpdate()
+	
+	private void titleDelete() {
+		int tno = no;
+		int result = dao.delete(tno);
+		if(result == 1) {
+			System.out.println("titleDelete : " + result);
+			JOptionPane.showMessageDialog(frame, "삭제되었습니다.", "알림", JOptionPane.INFORMATION_MESSAGE);
+			dispose();
+		}
+		
+	}// end titleDelete()
 	
 }// end TitleUpdateFrame

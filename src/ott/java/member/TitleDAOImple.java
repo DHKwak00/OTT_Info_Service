@@ -567,7 +567,71 @@ public class TitleDAOImple implements TitleDAO, OracleQuery {
 		return result;
 
 	} // end delete()
+	
+	// 내가 좋아요한 리스트
 
+	@Override
+	public ArrayList<TitleDTO> selectMyLike(int memNo) {
+		ArrayList<TitleDTO> list = null;
+
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+			// JDBC 드라이버를 메모리에 로드
+			DriverManager.registerDriver(new OracleDriver());
+			System.out.println("드라이버 로드 성공");
+
+			// DB와 연결
+			conn = DriverManager.getConnection(URL, USER, PASSWORD);
+			System.out.println("DB 연결 성공");
+
+			// Connection 객체를 사용하여 Statement 객체를 생성
+			pstmt = conn.prepareStatement(LIKE_LIST);
+			System.out.println(LIKE_LIST);
+			
+			pstmt.setInt(1, memNo);
+
+			// SQL 문장 실행(DB 서버로 SQL 전송)
+			rs = pstmt.executeQuery();
+
+			list = new ArrayList<>();
+			while (rs.next()) { // 레코드가 존재할 때까지
+				int titleNo = rs.getInt(1);
+				String titleName = rs.getString(2);
+				int titleLike = rs.getInt(3);
+				String titleRating = rs.getString(4);
+				String titleGenre = rs.getString(5);
+				String titleInfo = rs.getString(6);
+				String titleStar = rs.getString(7);
+				Date titleRel = rs.getDate(8);
+				String titleott = rs.getString(9);
+
+				TitleDTO dto = new TitleDTO(titleNo, titleName, titleLike, titleRating, titleGenre, titleInfo,
+						titleStar, titleRel, titleott);
+				list.add(dto);
+				System.out.println("dto 값:"+dto);
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				rs.close();
+				pstmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return list;
+	}
+
+	
 //	// 좋아요
 //	@Override
 //	public int likeIt(TitleDTO dto) {

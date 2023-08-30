@@ -19,6 +19,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -131,6 +132,7 @@ public class OttFrame extends JFrame {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				iLikeIt(inId);
+				selectAllTable();
 			}
 
 		});
@@ -144,8 +146,9 @@ public class OttFrame extends JFrame {
 		JButton btnLike = new JButton("나의 좋아요 목록");
 		btnLike.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
+				likeList(inId);
 			}
+
 		});
 		btnLike.setMargin(new Insets(2, 7, 2, 7));
 		btnLike.setFont(new Font("Gulim", Font.PLAIN, 12));
@@ -378,22 +381,59 @@ public class OttFrame extends JFrame {
 
 		// 모델 객체 담기
 		TableModel tableModel = table.getModel();
-
-		int mNo = mdao.getInfo(inId).getMemNo();
-		System.out.println("로그인 아이디 값 : " + mNo);
-		int tNo = (int) tableModel.getValueAt(row, 0);
-		System.out.println(tNo);
-
-		LikeItDTO ldto = new LikeItDTO(0, mNo, tNo);
-
-		if (ldto.getMemNo() == ldao.select(mNo).getMemNo() && ldto.getTitleNo() == ldao.select(mNo).getTitleNo()) {
-			ldao.delete(ldto);
-
-			System.out.println("좋아요 취소");
-		} else {
-			ldao.insert(ldto);
-			System.out.println("좋아요 등록");
+		
+		LikeItDTO ldto = null;
+		try {
+			int mNo = mdao.getInfo(inId).getMemNo();
+			System.out.println("로그인 아이디 값 : " + mNo);
+			
+			int tNo = (int) tableModel.getValueAt(row, 0);
+			
+			System.out.println("선택한 작품 아이디 값 : " +tNo);
+			
+			ldto = new LikeItDTO(0, mNo, tNo);
+			
+			// 선택한 row의 회원no와 좋아요테이블의 회원no가 같고 작품no와 좋테 작품no가 같으면 삭제
+			if (ldto.getMemNo() == ldao.select(mNo).getMemNo() &&
+					ldto.getTitleNo() == ldao.select(mNo).getTitleNo()) {
+				ldao.delete(ldto);
+				
+				
+				System.out.println("좋아요 취소");
+			} else {
+				ldao.insert(ldto);
+				System.out.println("좋아요 등록");
+			}
+			
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(frame, "작품을 선택해 주세요", "알림", JOptionPane.WARNING_MESSAGE);
 		}
 
 	}// end iLikeThis()
+	
+	private void likeList(String inId) {
+		int mNo = mdao.getInfo(inId).getMemNo();
+		ArrayList<TitleDTO> list = tdao.selectMyLike(mNo);
+		System.out.println("좋아요리스트 값:"+list);
+		tableModel.setRowCount(0);
+		if(list.isEmpty()) {
+			JOptionPane.showMessageDialog(frame, "좋아요한 작품이 없습니다.", "알림", JOptionPane.INFORMATION_MESSAGE);
+		}else {
+			for (int i = 0; i < list.size(); i++) {
+				records[0] = list.get(i).getTitleNo();
+				records[1] = list.get(i).getTitleName();
+				records[2] = list.get(i).getTitleLike();
+				records[3] = list.get(i).getTitleRating();
+				records[4] = list.get(i).getTitleGenre();
+				records[5] = list.get(i).getTitleInfo();
+				records[6] = list.get(i).getTitleStar();
+				records[7] = list.get(i).getTitleRel();
+				records[8] = list.get(i).getTitleott();
+				tableModel.addRow(records);
+			}
+			System.out.println("로그인 아이디 값 : " + mNo);
+		}
+		
+	}// end likeList()
+	
 }// end OttFrame
