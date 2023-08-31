@@ -132,7 +132,7 @@ public class OttFrame extends JFrame {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				iLikeIt(inId);
-				selectAllTable();
+				
 			}
 
 		});
